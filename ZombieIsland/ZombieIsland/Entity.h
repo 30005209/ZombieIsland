@@ -2,9 +2,12 @@
 #define Entity_H
 
 #include <vector>
+#include <iostream>
+
+using std::cout;
+using std::endl;
 
 using std::vector;
-
 
 //A virtual class that contains aspects common across all future objects on the board
 class Entity
