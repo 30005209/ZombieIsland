@@ -38,3 +38,23 @@ const vector<Entity>::iterator Entity::getPos(void)
 {
 	return pos;
 }
+
+const bool Entity::isBelow(Entity *)
+{
+	return false;
+}
+
+const bool Entity::isLeftOf(Entity *)
+{
+	return false;
+}
+
+const bool Entity::isOnCol(Entity *)
+{
+	return false;
+}
+
+const bool Entity::isOnRow(Entity *)
+{
+	return false;
+}
