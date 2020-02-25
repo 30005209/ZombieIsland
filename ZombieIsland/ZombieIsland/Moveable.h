@@ -15,7 +15,7 @@ public:
 	virtual void move(void);	//Random Movement
 	virtual void move(int);		//Prescribed Movement
 
-	virtual void encounter(Entity);	//Handles collision with another entity
+	virtual void encounter(Entity) = 0;		//Handles collision with another entity - Pure virtual so should be overwritten
 
 };
 

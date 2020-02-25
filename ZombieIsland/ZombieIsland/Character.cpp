@@ -8,3 +8,11 @@ Character::Character()
 Character::~Character()
 {
 }
+
+void Character::move(void)
+{
+}
+
+void Character::encounter(Entity)
+{
+}

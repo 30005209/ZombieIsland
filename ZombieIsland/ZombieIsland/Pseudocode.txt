@@ -9,7 +9,7 @@ virtual class Hole ::public Entity
 virtual	class moveable :: public Entity
 	enum { up = 0, right = 1, down = 2, left = 3}
 	virtal void move(int)
-	virtual void encounter(template T)
+	virtual void encounter(Entity)
 
 class Character :: public moveable
 	symbol = 'C'

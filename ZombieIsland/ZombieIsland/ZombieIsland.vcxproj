@@ -116,7 +116,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Character.cpp" />
+    <ClCompile Include="Die.cpp" />
     <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="Monster.cpp" />
     <ClCompile Include="Moveable.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
@@ -126,7 +128,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Character.h" />
+    <ClInclude Include="Die.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="Monster.h" />
     <ClInclude Include="Moveable.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
