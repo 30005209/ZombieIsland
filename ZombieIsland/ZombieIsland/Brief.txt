@@ -1,0 +1,30 @@
+TURN BASED
+2D Grid - size to be determined at run time (new keyword)
+Traps, monsters and main character to be randomly decided
+Monsters move in a random direction
+Monsters that hit traps die - removed from game
+If all monsters die main character wins
+If main character hits monster or traps they lose
+
+-----------------------------------------------------------------
+Log file that records names of anybody who uses the game and the result of each game they play
+Monsters move towards the main character - including a simple strategy
+Difficulty levels
+
+
+
+-------------------------------------------------------------------
+Grass entity // hides the player for a turn gives enemies a random movement
+
+
+//board on the bottom that shows how many remaining there are of each type and the level etc
+
+===============
+10% RUM
+10% Console class
+05% Log File
+20% OO Classes and Design
+15% Inheritance
+10% Game Logic
+10% Testing
+20% Demonstration
