@@ -1,0 +1,29 @@
+virtual class Entity
+	char symbol = ' '
+	vector<Entity>* board
+	vector<Entity>::iterator pos
+
+virtual class Hole ::public Entity
+	symbol = 'O'
+
+virtual	class moveable :: public Entity
+	enum { up = 0, right = 1, down = 2, left = 3}
+	virtal void move(int)
+	virtual void encounter(template T)
+
+class Character :: public moveable
+	symbol = 'C'
+	void encounter(template T)
+	void move(int)
+
+class Monster :: public moveable
+	symbol = 'M'
+	void encounter (template T)
+	void move(int)
+
+
+class Board 
+	int rowSize = input
+	int columnSize = input
+	int borderSize[2] = {rowSize+2, columnSize+2}
+	vector<entities> board
