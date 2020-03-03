@@ -2,7 +2,7 @@
 
 Entity::Entity()
 {
-	setSym(' ');
+	setSym('#');
 }
 
 
@@ -39,6 +39,7 @@ const vector<Entity>::iterator Entity::getPos(void)
 {
 	return pos;
 }
+
 
 const bool Entity::isBelow(Entity *)
 {
