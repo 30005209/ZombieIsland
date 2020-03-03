@@ -33,6 +33,9 @@ public:
 	const vector<Entity>* getBoard(void);			//Return a pointer to the board of the entity
 	const vector<Entity>::iterator getPos(void);	//Return the position of the entity
 
+	void move(void);								//Move in a random direction
+	void move(char);								//Move in a given direction
+	void move(Entity*);								//Move to closer to a given Entity
 
 	const bool isOnRow(Entity*);					//Returns whether current Entity is on the same Row as a given Entity
 	const bool isOnCol(Entity*);					//Returns whether current Entity is on the same Col as a given Entity
