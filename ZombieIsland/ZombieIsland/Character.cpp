@@ -9,8 +9,11 @@ Character::~Character()
 {
 }
 
-void Character::move(void)
+void Character::move(int input)
 {
+	setSym(input);
+
+	hasChanged = true;
 }
 
 void Character::encounter(Entity other)

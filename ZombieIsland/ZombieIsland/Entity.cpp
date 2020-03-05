@@ -40,6 +40,18 @@ const vector<Entity>::iterator Entity::getPos(void)
 	return pos;
 }
 
+void Entity::move(void)
+{
+}
+
+void Entity::move(int)
+{
+}
+
+void Entity::move(Entity *)
+{
+}
+
 
 const bool Entity::isBelow(Entity *)
 {
@@ -59,4 +71,9 @@ const bool Entity::isOnCol(Entity *)
 const bool Entity::isOnRow(Entity *)
 {
 	return false;
+}
+
+bool Entity::getHasChanged(void)
+{
+	return hasChanged;
 }

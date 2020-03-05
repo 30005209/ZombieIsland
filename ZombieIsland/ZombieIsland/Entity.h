@@ -18,11 +18,11 @@ private:
 	const vector<Entity> * brd;			//Pointer to the board being played on
 	vector<Entity>::iterator pos;		//Positon on the board stored as an iterator
 
-
 public:
 	Entity();
 	~Entity();
 
+	bool hasChanged = false;
 
 	void setBrd(const vector<Entity>*);				//Set board to a given one
 	void setPos(const vector<Entity>::iterator);	//Set the position to a new iterator in the board
@@ -33,9 +33,9 @@ public:
 	const vector<Entity>* getBoard(void);			//Return a pointer to the board of the entity
 	const vector<Entity>::iterator getPos(void);	//Return the position of the entity
 
-	void move(void);								//Move in a random direction
-	void move(char);								//Move in a given direction
-	void move(Entity*);								//Move to closer to a given Entity
+	virtual void move(void);						//Move in a random direction
+	virtual void move(int);							//Move in a given direction
+	virtual void move(Entity*);						//Move to closer to a given Entity
 
 	const bool isOnRow(Entity*);					//Returns whether current Entity is on the same Row as a given Entity
 	const bool isOnCol(Entity*);					//Returns whether current Entity is on the same Col as a given Entity
@@ -43,5 +43,6 @@ public:
 	const bool isLeftOf(Entity*);					//Returns whether current Entity is left of a given Entity
 	const bool isBelow(Entity*);					//Returns whether current Entity is below a given Entity
 
+	bool getHasChanged(void);
 };
 #endif

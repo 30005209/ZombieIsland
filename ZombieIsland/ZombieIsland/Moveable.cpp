@@ -19,6 +19,12 @@ void Moveable::move(int)
 {
 }
 
-void Moveable::encounter(Entity target )
+void Moveable::move(Entity *)
+{
+}
+
+
+
+void Moveable::encounter(Entity target)
 {
 }
