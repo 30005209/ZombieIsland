@@ -15,7 +15,7 @@ void Entity::setBrd(const vector<Entity>* pBrd)
 	this->brd = pBrd;
 }
 
-void Entity::setPos(const vector<Entity>::iterator newPos)
+void Entity::setPos(vector<Entity>::iterator newPos)
 {
 	this->pos = newPos;
 }
@@ -35,7 +35,7 @@ const vector<Entity>* Entity::getBoard(void)
 	return brd;
 }
 
-const vector<Entity>::iterator Entity::getPos(void)
+vector<Entity>::iterator Entity::getPos(void)
 {
 	return pos;
 }
@@ -71,6 +71,16 @@ const bool Entity::isOnCol(Entity *)
 const bool Entity::isOnRow(Entity *)
 {
 	return false;
+}
+
+void Entity::setCode(int newCode)
+{
+	code = newCode;
+}
+
+int Entity::getCode(void)
+{
+	return code;
 }
 
 bool Entity::getHasChanged(void)

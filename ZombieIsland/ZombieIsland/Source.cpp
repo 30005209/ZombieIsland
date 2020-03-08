@@ -17,55 +17,63 @@ using std::endl;
 int main()
 {
 	Entity ent;
-	Monster mons;
 	Character cha;
 	Hole ho;
 
 	Console con;
 
-	vector<Tile> board;
+	vector<Entity> board;
 	//vector<Tile>::iterator iterBoard = board.begin();
 
-	const int ROW = 10;
-	const int COL = 10;
+	const int ROW = 10;				//No. Rows
+	const int COL = 10;				//No. columns
 
-	const int NOMON = 15;
-	const int NOHOL = 8;
-	const int NOCHA = 1;	
+	const int NOMON = 15;			//No. Monsters
+	const int NOHOL = 8;			//No. Holes
+	const int NOCHA = 1;			//No. Characters
 
 	char up = 'w';
 	char down = 's';
 	char left = 'a';
 	char right = 'd';
 
-
+	//Set the board size
 	board.resize(ROW * COL);
 
-	vector<Tile>::iterator iterBoard = board.begin();
-	for (int i = 0; iterBoard != board.end(); iterBoard++, i++)
+	vector<Entity>::iterator iter = board.begin();
+	for (int i = 0; iter != board.end(); i++, iter++)
 	{
-		if (i < NOMON + NOHOL + NOCHA)
+		if (i < NOMON)							//Make a character
 		{
-			iterBoard->setOwner(&cha);
+			board.at(i) = Monster();
 		}
-
-		if (i < NOMON + NOHOL)
+		else if (i < NOMON + NOHOL)				//Make a Hole
 		{
-			iterBoard->setOwner(&ho);
-		}
-
-		if (i < NOMON)
+			board.at(i) = Hole();
+		}	
+		else if (i < NOMON + NOHOL + NOCHA)		//Make a Character
 		{
-			iterBoard->setOwner(&mons);
+			board.at(i) = Character();
+		}	
+		else									//Make a default Entity
+		{
+			board.at(i) = Entity();	
 		}
+	
+		board.at(i).setCode(i);
 	}
+	
 
+
+	//Randomise the board a random amount of times (otherwise it would be the same "random" layout)
 	for (int i = Die::roll(); i >0; i--)
 	{
 		std::random_shuffle(board.begin(), board.end());
 	}
 	
-	iterBoard = board.begin();
+
+	//Print the Board
+	vector<Entity>::iterator iterBoard = board.begin();
 	for (int i = 0; iterBoard != board.end(); iterBoard++, i++)
 	{
 		if (i != 0)
@@ -75,7 +83,8 @@ int main()
 				cout << endl;
 			}
 		}
-		cout << iterBoard->readOwner();
+		cout << iterBoard->getSymbol();
+		iterBoard->setPos(iterBoard);
 	}
 		
 
@@ -84,36 +93,39 @@ int main()
 		bool change = false;
 		char key = _getch();
 
+		//If the player has done movement input
 		if (key == up || key == down || key == left || key == right)
 		{
-			//Movement
+			//Move the player
 			cha.move(key);
 			change = true;
 		}
 
+		//If they have pressed Enter
 		if (key == 13)
 		{
 			iterBoard = board.begin();
 			for (int i = 0; iterBoard != board.end(); iterBoard++, i++)
 			{
-				if (iterBoard->grabOwner()->getSymbol() == 'M')
+				if (iterBoard->getSymbol() == 'M')
 				{
-					iterBoard->grabOwner()->move(1);
+					iterBoard->move(1);
 				}
 			
-				if(iterBoard->grabOwner()->getSymbol() == 'm')
+				if(iterBoard->getSymbol() == 'm')
 				{
-					iterBoard->grabOwner()->move(2);
+					iterBoard->move(2);
 				}
 			}
 		}
 
+		//If something has chaged
 		if (change)
 		{
 			iterBoard = board.begin();
 			for (int i = 0; iterBoard != board.end(); iterBoard++, i++)
 			{ 
-				if (iterBoard->grabOwner()->getHasChanged())
+				if (iterBoard->getHasChanged())
 				{
 
 					//Set the postion equal to total number of spaces
@@ -135,7 +147,7 @@ int main()
 					{
 						con.setCursorPosition({SHORT(0), SHORT(x) });
 					}
-					cout << iterBoard->readOwner();
+					cout << iterBoard->getSymbol();
 				}
 			}
 		}

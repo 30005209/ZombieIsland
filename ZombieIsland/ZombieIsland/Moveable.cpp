@@ -25,6 +25,6 @@ void Moveable::move(Entity *)
 
 
 
-void Moveable::encounter(Entity target)
+void Moveable::encounter(vector<Entity>::iterator target)
 {
 }

@@ -12,7 +12,7 @@ public:
 
 	
 	void move(int);					//Controls movement for character
-	void encounter(Entity) final;	//Handles what occurs when it collides with another entity
+	void encounter(vector<Entity>::iterator) final;	//Handles what occurs when it collides with another entity
 
 };
 #endif

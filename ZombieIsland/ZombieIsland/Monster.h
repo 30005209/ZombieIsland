@@ -11,7 +11,7 @@ public:
 	void move(void);	//Random Movement
 	void move(int);		//Move in a prescribed way
 
-	void encounter(Entity);	//Handles what occurs when it collides with another entity
+	void encounter(vector<Entity>::iterator);	//Handles what occurs when it collides with another entity
 
 };
 

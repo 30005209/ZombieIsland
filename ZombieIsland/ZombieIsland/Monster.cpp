@@ -17,9 +17,9 @@ void Monster::move(int)
 {
 }
 
-void Monster::encounter(Entity other)
+void Monster::encounter(vector<Entity>::iterator other)
 {
-	switch (other.getSymbol())
+	switch (other->getSymbol())
 	{
 	case ' ':
 		cout << "its an entity";

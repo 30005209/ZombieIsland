@@ -7,6 +7,7 @@
 using std::cout;
 using std::endl;
 
+
 using std::vector;
 
 //A virtual class that contains aspects common across all future objects on the board
@@ -14,9 +15,10 @@ class Entity
 {
 private:
 
-	char sym;							//The symbol being displayed
-	const vector<Entity> * brd;			//Pointer to the board being played on
-	vector<Entity>::iterator pos;		//Positon on the board stored as an iterator
+	char sym;										//The symbol being displayed
+	const vector<Entity> * brd;						//Pointer to the board being played on
+	vector<Entity>::iterator pos;					//Positon on the board stored as an iterator
+	int code;										//The code to distinguish this entity from all others
 
 public:
 	Entity();
@@ -25,13 +27,13 @@ public:
 	bool hasChanged = false;
 
 	void setBrd(const vector<Entity>*);				//Set board to a given one
-	void setPos(const vector<Entity>::iterator);	//Set the position to a new iterator in the board
+	void setPos(vector<Entity>::iterator);			//Set the position to a new iterator in the board
 	void setSym(const char);						//Set the symbol to a new given one
 
 
 	const char getSymbol(void);						//Return the symbol of the entity
 	const vector<Entity>* getBoard(void);			//Return a pointer to the board of the entity
-	const vector<Entity>::iterator getPos(void);	//Return the position of the entity
+	vector<Entity>::iterator getPos(void);	//Return the position of the entity
 
 	virtual void move(void);						//Move in a random direction
 	virtual void move(int);							//Move in a given direction
@@ -42,6 +44,9 @@ public:
 
 	const bool isLeftOf(Entity*);					//Returns whether current Entity is left of a given Entity
 	const bool isBelow(Entity*);					//Returns whether current Entity is below a given Entity
+
+	void setCode(int);
+	int getCode(void);
 
 	bool getHasChanged(void);
 };
