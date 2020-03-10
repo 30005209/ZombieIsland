@@ -2,6 +2,7 @@
 
 Character::Character()
 {
+	setSym('C');
 }
 
 Character::~Character()

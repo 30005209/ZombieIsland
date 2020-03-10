@@ -21,7 +21,8 @@ private:
 	vector<Entity> * ptrBoard;						//Pointer to the board being played on
 	Position pos;									//Positon on the board stored as an iterator
 	int code;										//The code to distinguish this entity from all others
-	bool hasChanged;
+	bool hasChanged;								//Notes whether the Entity has changed since it was last printed
+	bool isAlive;									//Notes whether the Entity is alive
 
 public:
 	Entity();
@@ -33,6 +34,7 @@ public:
 	void setPos(Position);						//Set position to a given one
 	void setSym(char);							//Set symbol to a given one
 	void setCode(int);							//Set new code to a given one
+	void setIsAlive(bool);						//Sets isAlive
 
 
 	//Getters
@@ -41,6 +43,7 @@ public:
 	bool getHasChanged(void);					//Get haschanged
 	vector<Entity>* getBoard(void);				//Get the pointer to the board
 	Position getPos(void);						//Get the current position
+	bool getIsAlive(void);						//Get isAlive
 
 
 	//Other Functions

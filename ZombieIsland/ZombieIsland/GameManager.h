@@ -8,8 +8,10 @@
 #include "Character.h"
 #include "Hole.h"
 #include <vector>
+#include <string>
 
 using std::vector;
+using std::string;
 
 class GameManager
 {
@@ -17,14 +19,7 @@ class GameManager
 
 	Console con;						//Console class
 
-	static vector<Entity> board;		//The board being played on
-
-	vector<Entity> characters;			//All of the characters
-	vector<Entity> monsters;			//All of the enemies
-	vector<Entity> holes;				//All of the objects
-	
-
-	bool isSet;							//Board has been set
+	vector<Entity> board;				//The board being played on
 
 
 	int rows;							//No. rows on the board
@@ -38,11 +33,12 @@ class GameManager
 	char left;							//Mapped control for left
 	char down;							//Mapped control for down
 	char right;							//Mapped control for right
-
-
+	
 public:
 	GameManager();
+	GameManager(int, int, int, int, int, string);
 	~GameManager();
+
 
 	//Setters
 
@@ -60,23 +56,23 @@ public:
 	int getNumMon(void);									//Get the number of monsters
 	int getNumHol(void);									//Get the number of Holes
 	int getNumCha(void);									//Get the number of Player characters
-
+	
 	int getRemMon(void);									//Gets how many remaining monsters there are
 
 	char getUp(void);										//Get the currently mapped control for up
 	char getDown(void);										//Get the currently mapped control for down
 	char getLeft(void);										//Get the currently mapped control for left
 	char getRight(void);									//Get the currently mapped control for right
-
-	bool isBoardSet(void);									//Get whether the board has been set
 	
 	//Other functions
 															
 	bool isGameOver(void);									//Is the game over
 
-	void addEntity(Entity newEntity = Entity(), 
-				Position newPos = board.begin());			//Adds a given entity to a give position if none given (first tile)
+	void addEntity(Entity newEntity = Entity());			//Adds a given entity to a give position if none given (first tile)
 
+	void printBoard(void);									//Print the entire board to console
+
+	void randomiseBoard(void);								//Randomise the board a d6 number of times
 
 };
 #endif

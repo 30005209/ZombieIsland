@@ -33,11 +33,11 @@ void Monster::move(int direction)
 		break;
 
 	case 3:	//Left
-
+		setPos(getPos() - 1);
 		break;
 
 	case 4:	//Right
-
+		setPos(getPos() + 1);
 		break;
 	}
 }

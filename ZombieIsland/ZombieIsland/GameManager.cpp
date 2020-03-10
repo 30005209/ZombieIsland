@@ -8,20 +8,56 @@ GameManager::GameManager()
 	setEntityNums();
 	setControlScheme();
 
-	while (sizeof(monsters) != mon)
+	for (int i = mon; i > 0; i--)
 	{
 		addEntity(Monster());
 	}
 
-	while (sizeof(holes) != hol)
+	for (int i = hol; i > 0; i--)
 	{
 		addEntity(Hole());
 	}
 
-	while (sizeof(characters) != cha)
+	for (int i = cha; i > 0; i--)
 	{
 		addEntity(Character());
 	}
+
+	for (int i = (getRow() * getCol()) - mon - hol - cha; i > 0; i--)
+	{
+		addEntity();
+	}
+
+	randomiseBoard();
+}
+
+GameManager::GameManager(int row, int col, int mon, int hol, int cha, string controls)
+{
+	setGridSize(row, col);
+	setEntityNums(mon, hol, cha);
+	setControlScheme(controls[0], controls[1], controls[2], controls[3]);
+
+	for (int i = mon; i > 0; i--)
+	{
+		addEntity(Monster());
+	}
+
+	for (int i = hol; i > 0; i--)
+	{
+		addEntity(Hole());
+	}
+
+	for (int i = cha; i > 0; i--)
+	{
+		addEntity(Character());
+	}
+
+	for (int i = (getRow() * getCol()) - mon - hol - cha; i > 0; i--)
+	{
+		addEntity();
+	}
+
+	randomiseBoard();	
 }
 
 
@@ -48,7 +84,6 @@ void GameManager::setControlScheme(char newUp, char newLeft, char newDown, char 
 	this->left = newLeft;
 	this->down = newDown;
 	this->right = newRight;
-
 }
 
 int GameManager::getRow(void)
@@ -78,7 +113,15 @@ int GameManager::getNumCha(void)
 
 int GameManager::getRemMon(void)
 {
-	return sizeof(monsters);
+	int numRemaining = 0;
+
+	for (vector<Entity>::iterator i = board.begin(); 
+		i != board.end(); i++)
+	{
+		numRemaining += i->getIsAlive();
+	}
+
+	return numRemaining;
 }
 
 char GameManager::getUp(void)
@@ -101,43 +144,42 @@ char GameManager::getRight(void)
 	return this->right;
 }
 
-bool GameManager::isBoardSet(void)
-{
-	return this->isSet;
-}
-
 bool GameManager::isGameOver(void)
 {
-	return sizeof(monsters) == 0;
+	return getRemMon();
 }
 
-void GameManager::addEntity(Entity newEntity, Position newPos)
+void GameManager::addEntity(Entity newEntity)
 {
-	//If the space is blank addd it to that tile
-	if (newPos->getSymbol() == '#')
-	{
-		newEntity.setPos(newPos);
-	}
+	static int codeCounter = 1;
+	newEntity.setCode(codeCounter++);
+	board.emplace_back(newEntity);
 
-	//Otherwise add it to the first free space
-	else
+}
+
+void GameManager::printBoard(void)
+{
+	vector<Entity>::iterator iterBoard = board.begin();
+
+	for (int i = 0; iterBoard != board.end(); iterBoard++, i++)
 	{
-		Position newPos = board.begin();
-		bool lookingForPos = true;
-		//Add it to the first unoccupied space on the board
-		while (lookingForPos)
+		if (i != 0)
 		{
-			if (newPos->getSymbol() == '#')
+			if (!(i % getCol()))
 			{
-				newEntity.setPos(newPos);
-				lookingForPos = false;
-			}
-			else
-			{
-				newPos++;
+				cout << endl;
 			}
 		}
+		cout << iterBoard->getSymbol();
+		iterBoard->setPos(iterBoard);
+	}
+}
+
+void GameManager::randomiseBoard(void)
+{
+	for (int i = Die::roll(); i > 0; i--)
+	{
+		std::random_shuffle(board.begin(), board.end());
 	}
 
-	//ADD TO vector
 }

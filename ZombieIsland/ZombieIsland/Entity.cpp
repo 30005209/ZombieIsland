@@ -33,6 +33,11 @@ void Entity::setCode(int newCode)
 	this->code = newCode;
 }
 
+void Entity::setIsAlive(bool nowAlive)
+{
+	this->isAlive = nowAlive;
+}
+
 char Entity::getSymbol(void)
 {
 	return this->symbol;
@@ -56,6 +61,11 @@ vector<Entity>* Entity::getBoard(void)
 Position Entity::getPos(void)
 {
 	return this->pos;
+}
+
+bool Entity::getIsAlive(void)
+{
+	return isAlive;
 }
 
 void Entity::taketurn(int numTurns = 1)

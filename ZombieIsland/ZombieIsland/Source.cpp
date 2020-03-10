@@ -15,57 +15,16 @@ using std::endl;
 
 int main()
 {
+	GameManager GM;
 
-	////Set the board size
-	//board.resize(ROW * COL);
+	GM.printBoard();
 
-	//vector<Entity>::iterator iter = board.begin();
-	//for (int i = 0; iter != board.end(); i++, iter++)
-	//{
-	//	if (i < NOMON)							//Make a character
-	//	{
-	//		board.at(i) = Monster();
-	//	}
-	//	else if (i < NOMON + NOHOL)				//Make a Hole
-	//	{
-	//		board.at(i) = Hole();
-	//	}	
-	//	else if (i < NOMON + NOHOL + NOCHA)		//Make a Character
-	//	{
-	//		board.at(i) = Character();
-	//	}	
-	//	else									//Make a default Entity
-	//	{
-	//		board.at(i) = Entity();	
-	//	}
-	//
-	//	board.at(i).setCode(i);
-	//}
-	//
+	while (!GM.isGameOver())
+	{
+
+	}
 
 
-	////Randomise the board a random amount of times (otherwise it would be the same "random" layout)
-	//for (int i = Die::roll(); i >0; i--)
-	//{
-	//	std::random_shuffle(board.begin(), board.end());
-	//}
-	//
-
-	////Print the Board
-	//vector<Entity>::iterator iterBoard = board.begin();
-	//for (int i = 0; iterBoard != board.end(); iterBoard++, i++)
-	//{
-	//	if (i != 0)
-	//	{
-	//		if (!(i % COL))
-	//		{
-	//			cout << endl;
-	//		}
-	//	}
-	//	cout << iterBoard->getSymbol();
-	//	iterBoard->setPos(iterBoard);
-	//}
-	//	
 
 	//while (TRUE)
 	//{
