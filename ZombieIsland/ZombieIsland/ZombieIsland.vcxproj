@@ -123,7 +123,6 @@
     <ClCompile Include="Hole.cpp" />
     <ClCompile Include="Monster.cpp" />
     <ClCompile Include="Source.cpp" />
-    <ClCompile Include="Tile.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Brief.txt" />
@@ -137,7 +136,6 @@
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="Hole.h" />
     <ClInclude Include="Monster.h" />
-    <ClInclude Include="Tile.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

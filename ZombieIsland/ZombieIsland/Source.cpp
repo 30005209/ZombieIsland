@@ -1,11 +1,3 @@
-#include <iostream>
-#include <string>
-#include "Character.h"
-#include "Monster.h"
-#include "Hole.h"
-#include "Tile.h"
-#include <algorithm>
-#include "Die.h"
 #include "GameManager.h"
 
 using std::cout;
