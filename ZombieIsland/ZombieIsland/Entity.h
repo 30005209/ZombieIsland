@@ -3,51 +3,51 @@
 
 #include <vector>
 #include <iostream>
+#include "Die.h"
 
 using std::cout;
 using std::endl;
-
-
 using std::vector;
 
-//A virtual class that contains aspects common across all future objects on the board
+
+//Contains all base functions for objects on the board
 class Entity
 {
 private:
 
-	char sym;										//The symbol being displayed
-	const vector<Entity> * brd;						//Pointer to the board being played on
-	vector<Entity>::iterator pos;					//Positon on the board stored as an iterator
+	typedef vector<Entity>::iterator Position;
+	
+	char symbol;									//The symbol being displayed
+	vector<Entity> * ptrBoard;						//Pointer to the board being played on
+	Position pos;									//Positon on the board stored as an iterator
 	int code;										//The code to distinguish this entity from all others
+	bool hasChanged;
 
 public:
 	Entity();
 	~Entity();
 
-	bool hasChanged = false;
+	//Setters
 
-	void setBrd(const vector<Entity>*);				//Set board to a given one
-	void setPos(vector<Entity>::iterator);			//Set the position to a new iterator in the board
-	void setSym(const char);						//Set the symbol to a new given one
+	void setBrd(vector<Entity>*);				//Set board to a given one
+	void setPos(Position);						//Set position to a given one
+	void setSym(char);							//Set symbol to a given one
+	void setCode(int);							//Set new code to a given one
 
 
-	const char getSymbol(void);						//Return the symbol of the entity
-	const vector<Entity>* getBoard(void);			//Return a pointer to the board of the entity
-	vector<Entity>::iterator getPos(void);	//Return the position of the entity
+	//Getters
+	char getSymbol(void);						//Get the symbol of the entity
+	int getCode(void);							//Get the code of the entity
+	bool getHasChanged(void);					//Get haschanged
+	vector<Entity>* getBoard(void);				//Get the pointer to the board
+	Position getPos(void);						//Get the current position
 
-	virtual void move(void);						//Move in a random direction
-	virtual void move(int);							//Move in a given direction
-	virtual void move(Entity*);						//Move to closer to a given Entity
 
-	const bool isOnRow(Entity*);					//Returns whether current Entity is on the same Row as a given Entity
-	const bool isOnCol(Entity*);					//Returns whether current Entity is on the same Col as a given Entity
+	//Other Functions
+	virtual void taketurn(int);					//Take a given amount of turns if non specifed take one
+	virtual void move(int);						//Move in a given direction if non specifed take a random one
 
-	const bool isLeftOf(Entity*);					//Returns whether current Entity is left of a given Entity
-	const bool isBelow(Entity*);					//Returns whether current Entity is below a given Entity
-
-	void setCode(int);
-	int getCode(void);
-
-	bool getHasChanged(void);
 };
+
+
 #endif

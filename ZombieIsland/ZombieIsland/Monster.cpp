@@ -9,29 +9,36 @@ Monster::~Monster()
 {
 }
 
-void Monster::move(void)
+void Monster::taketurn(int numTurns)
 {
-}
-
-void Monster::move(int)
-{
-}
-
-void Monster::encounter(vector<Entity>::iterator other)
-{
-	switch (other->getSymbol())
+	//Move so long as it is the Monsters turn
+	while (numTurns)
 	{
-	case ' ':
-		cout << "its an entity";
+		move();
+		numTurns--;
+	}
+	
+}
+
+void Monster::move(int direction)
+{
+	switch (direction)
+	{
+	case 1:	//Up
+
 		break;
 
+	case 2:	//Down
 
-	case 'C':
-		cout << "its a character";
 		break;
 
-	case 'O':
-		cout << "its a hole";
+	case 3:	//Left
+
+		break;
+
+	case 4:	//Right
+
 		break;
 	}
 }
+

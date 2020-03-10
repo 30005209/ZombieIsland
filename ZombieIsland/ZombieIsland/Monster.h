@@ -1,18 +1,16 @@
 #ifndef Monster_H
 #define Monster_H
-#include "Moveable.h"
+#include "Entity.h"
 
-class Monster :	public Moveable
+class Monster :	public Entity
 {
 public:
 	Monster();
 	~Monster();
 
-	void move(void);	//Random Movement
-	void move(int);		//Move in a prescribed way
 
-	void encounter(vector<Entity>::iterator);	//Handles what occurs when it collides with another entity
+	void taketurn(int numTurns = 1);			//Take a given amount of turns if non specifed take one
+	void move(int direction = Die::roll(4));	//Move in a given direction if non specifed take a random one
 
 };
-
 #endif

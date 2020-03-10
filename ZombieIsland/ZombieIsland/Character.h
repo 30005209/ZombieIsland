@@ -1,18 +1,14 @@
 #ifndef Character_H
-#define Charater_H
+#define Character_H
 
-#include "Moveable.h"
+#include "Monster.h"
 
-class Character :	public Moveable
+class Character :	public Monster
 {
 public:
 	Character();
 	~Character();
 
-
-	
-	void move(int);					//Controls movement for character
-	void encounter(vector<Entity>::iterator) final;	//Handles what occurs when it collides with another entity
 
 };
 #endif

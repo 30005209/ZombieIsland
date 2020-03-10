@@ -119,9 +119,9 @@
     <ClCompile Include="console.cpp" />
     <ClCompile Include="Die.cpp" />
     <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="Hole.cpp" />
     <ClCompile Include="Monster.cpp" />
-    <ClCompile Include="Moveable.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="Tile.cpp" />
   </ItemGroup>
@@ -134,9 +134,9 @@
     <ClInclude Include="console.h" />
     <ClInclude Include="Die.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="GameManager.h" />
     <ClInclude Include="Hole.h" />
     <ClInclude Include="Monster.h" />
-    <ClInclude Include="Moveable.h" />
     <ClInclude Include="Tile.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -1,5 +1,8 @@
 #include "Entity.h"
 
+
+typedef vector<Entity>::iterator Position;
+
 Entity::Entity()
 {
 	setSym('#');
@@ -10,80 +13,79 @@ Entity::~Entity()
 {
 }
 
-void Entity::setBrd(const vector<Entity>* pBrd)
+void Entity::setBrd(vector<Entity>* newBoard)
 {
-	this->brd = pBrd;
+	this->ptrBoard = newBoard;
 }
 
-void Entity::setPos(vector<Entity>::iterator newPos)
+void Entity::setSym(char newSymbol)
+{
+	this->symbol = newSymbol;
+}
+
+void Entity::setPos(Position newPos)
 {
 	this->pos = newPos;
 }
 
-void Entity::setSym(const char newSym)
-{
-	this->sym = newSym;
-}
-
-const char Entity::getSymbol(void)
-{
-	return sym;
-}
-
-const vector<Entity>* Entity::getBoard(void)
-{
-	return brd;
-}
-
-vector<Entity>::iterator Entity::getPos(void)
-{
-	return pos;
-}
-
-void Entity::move(void)
-{
-}
-
-void Entity::move(int)
-{
-}
-
-void Entity::move(Entity *)
-{
-}
-
-
-const bool Entity::isBelow(Entity *)
-{
-	return false;
-}
-
-const bool Entity::isLeftOf(Entity *)
-{
-	return false;
-}
-
-const bool Entity::isOnCol(Entity *)
-{
-	return false;
-}
-
-const bool Entity::isOnRow(Entity *)
-{
-	return false;
-}
-
 void Entity::setCode(int newCode)
 {
-	code = newCode;
+	this->code = newCode;
+}
+
+char Entity::getSymbol(void)
+{
+	return this->symbol;
 }
 
 int Entity::getCode(void)
 {
-	return code;
+	return this->code;
 }
 
 bool Entity::getHasChanged(void)
 {
-	return hasChanged;
+	return this->hasChanged;
+}
+
+vector<Entity>* Entity::getBoard(void)
+{
+	return this->ptrBoard;
+}
+
+Position Entity::getPos(void)
+{
+	return this->pos;
+}
+
+void Entity::taketurn(int numTurns = 1)
+{
+	while (numTurns)
+	{
+		//INSERT CODE FOR TURN
+		
+		numTurns--;
+	}
+}
+
+void Entity::move(int direction = Die::roll(4))
+{
+	switch (direction)
+	{
+	case 1:	//Up
+
+		break;
+
+	case 2:	//Down
+
+		break;
+
+	case 3:	//Left
+
+		break;
+
+	case 4:	//Right
+
+		break;
+	}
 }
