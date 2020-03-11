@@ -13,6 +13,14 @@ int main()
 
 	while (!GM.isGameOver())
 	{
+		bool change = false;
+		char key = _getch();
+
+		if (GM.isPlayerControl(key))
+		{
+			
+		}
+
 
 	}
 

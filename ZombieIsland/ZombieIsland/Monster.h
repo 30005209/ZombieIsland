@@ -9,7 +9,7 @@ public:
 	~Monster();
 
 
-	void taketurn(int numTurns = 1);			//Take a given amount of turns if non specifed take one
+	void taketurn(void);			//Take a given amount of turns if non specifed take one
 	void move(int direction = Die::roll(4));	//Move in a given direction if non specifed take a random one
 
 };

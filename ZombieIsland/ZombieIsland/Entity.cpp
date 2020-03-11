@@ -6,6 +6,7 @@ typedef vector<Entity>::iterator Position;
 Entity::Entity()
 {
 	setSym('#');
+	this->baseMove = 1;
 }
 
 
@@ -38,9 +39,19 @@ void Entity::setIsAlive(bool nowAlive)
 	this->isAlive = nowAlive;
 }
 
+void Entity::setBaseMove(int newVal = 1)
+{
+	baseMove = newVal;
+}
+
 char Entity::getSymbol(void)
 {
 	return this->symbol;
+}
+
+int Entity::getBaseMove(void)
+{
+	return baseMove;
 }
 
 int Entity::getCode(void)
@@ -68,9 +79,11 @@ bool Entity::getIsAlive(void)
 	return isAlive;
 }
 
-void Entity::taketurn(int numTurns = 1)
+void Entity::taketurn(void)
 {
-	while (numTurns)
+	int numTurns = getBaseMove();
+
+	while (numTurns > 0)
 	{
 		//INSERT CODE FOR TURN
 		

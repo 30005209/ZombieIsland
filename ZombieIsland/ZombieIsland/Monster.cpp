@@ -9,10 +9,12 @@ Monster::~Monster()
 {
 }
 
-void Monster::taketurn(int numTurns)
+void Monster::taketurn(void)
 {
 	//Move so long as it is the Monsters turn
-	while (numTurns)
+	int numTurns = getBaseMove();
+
+	while (numTurns > 0)
 	{
 		move();
 		numTurns--;

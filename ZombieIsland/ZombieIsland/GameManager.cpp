@@ -149,6 +149,12 @@ bool GameManager::isGameOver(void)
 	return getRemMon();
 }
 
+bool GameManager::isPlayerControl(char entry)
+{
+	return (entry == getUp() || entry == getDown()
+		|| entry == getLeft() || entry == getRight());
+}
+
 void GameManager::addEntity(Entity newEntity)
 {
 	static int codeCounter = 1;

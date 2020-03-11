@@ -63,16 +63,21 @@ public:
 	char getDown(void);										//Get the currently mapped control for down
 	char getLeft(void);										//Get the currently mapped control for left
 	char getRight(void);									//Get the currently mapped control for right
-	
+
 	//Other functions
 															
 	bool isGameOver(void);									//Is the game over
+	bool isPlayerControl(char);								//Check if its a game control for the player
 
 	void addEntity(Entity newEntity = Entity());			//Adds a given entity to a give position if none given (first tile)
 
 	void printBoard(void);									//Print the entire board to console
 
 	void randomiseBoard(void);								//Randomise the board a d6 number of times
+
+	void performPlayerMoves(char);
+
+	void performMonsterMoves(void);
 
 };
 #endif
