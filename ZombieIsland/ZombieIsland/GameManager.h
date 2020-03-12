@@ -9,6 +9,7 @@
 #include "Hole.h"
 #include <vector>
 #include <string>
+#include "Terrain.h"
 
 using std::vector;
 using std::string;
@@ -20,7 +21,6 @@ class GameManager
 	Console con;						//Console class
 
 	vector<Entity> board;				//The board being played on
-
 
 	int rows;							//No. rows on the board
 	int columns;						//No. columns on the board
@@ -64,20 +64,25 @@ public:
 	char getLeft(void);										//Get the currently mapped control for left
 	char getRight(void);									//Get the currently mapped control for right
 
+	Console & getCon(void);									//Gets the console
+
+
 	//Other functions
 															
 	bool isGameOver(void);									//Is the game over
-	bool isPlayerControl(char);								//Check if its a game control for the player
+	bool isPlayerControl(char);								//Check if its a control for the player
+	bool isGameControl(char);								//Check if its a game control
 
-	void addEntity(Entity newEntity = Entity());			//Adds a given entity to a give position if none given (first tile)
+	template<class entityType>
+	void addEntity(entityType newEntity);
+
+	//void addEntity(Terrain newEntity);
 
 	void printBoard(void);									//Print the entire board to console
-
 	void randomiseBoard(void);								//Randomise the board a d6 number of times
 
-	void performPlayerMoves(char);
-
-	void performMonsterMoves(void);
+	void performPlayerMoves(char);							//Performs all the moves for Players
+	void performMonsterMoves(void);							//Performs all the moves for Monsters
 
 };
 #endif

@@ -25,7 +25,7 @@ GameManager::GameManager()
 
 	for (int i = (getRow() * getCol()) - mon - hol - cha; i > 0; i--)
 	{
-		addEntity();
+		addEntity(Terrain());
 	}
 
 	randomiseBoard();
@@ -39,6 +39,7 @@ GameManager::GameManager(int row, int col, int mon, int hol, int cha, string con
 
 	for (int i = mon; i > 0; i--)
 	{
+		
 		addEntity(Monster());
 	}
 
@@ -54,7 +55,7 @@ GameManager::GameManager(int row, int col, int mon, int hol, int cha, string con
 
 	for (int i = (getRow() * getCol()) - mon - hol - cha; i > 0; i--)
 	{
-		addEntity();
+		addEntity(Hole());
 	}
 
 	randomiseBoard();	
@@ -118,7 +119,10 @@ int GameManager::getRemMon(void)
 	for (vector<Entity>::iterator i = board.begin(); 
 		i != board.end(); i++)
 	{
-		numRemaining += i->getIsAlive();
+		if (i->getIsAlive())
+		{
+			numRemaining++;
+		}
 	}
 
 	return numRemaining;
@@ -144,9 +148,14 @@ char GameManager::getRight(void)
 	return this->right;
 }
 
+Console & GameManager::getCon(void)
+{
+	return con;
+}
+
 bool GameManager::isGameOver(void)
 {
-	return getRemMon();
+	return !getRemMon();
 }
 
 bool GameManager::isPlayerControl(char entry)
@@ -155,7 +164,13 @@ bool GameManager::isPlayerControl(char entry)
 		|| entry == getLeft() || entry == getRight());
 }
 
-void GameManager::addEntity(Entity newEntity)
+bool GameManager::isGameControl(char)
+{
+	return false;
+}
+
+template<class entityType>
+void GameManager::addEntity(entityType newEntity)
 {
 	static int codeCounter = 1;
 	newEntity.setCode(codeCounter++);
@@ -188,4 +203,50 @@ void GameManager::randomiseBoard(void)
 		std::random_shuffle(board.begin(), board.end());
 	}
 
+}
+
+void GameManager::performPlayerMoves(char move)
+{
+	//Convert the movement char into a direction
+	int direction;
+
+	if (move == getUp())
+	{
+		direction = 1;
+	}
+	else if (move == getLeft())
+	{
+		direction = 2;
+	}
+	else if (move == getDown())
+	{
+		direction = 3;
+	}
+	else if (move == getRight())
+	{
+		direction = 4;
+	}
+
+
+	//Find player
+	for (vector<Entity>::iterator i = board.begin();
+		i != board.end(); i++)
+	{
+		if (i->getSymbol() == 'C')
+		{
+			//Character *T =&board[3];
+			
+			//Convert the move into the direction then move that way
+
+			/*Character(i).move(direction);*/
+
+
+		}
+	}
+
+	//Perform their actions
+}
+
+void GameManager::performMonsterMoves(void)
+{
 }

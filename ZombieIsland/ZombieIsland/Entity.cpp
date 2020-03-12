@@ -5,8 +5,6 @@ typedef vector<Entity>::iterator Position;
 
 Entity::Entity()
 {
-	setSym('#');
-	this->baseMove = 1;
 }
 
 

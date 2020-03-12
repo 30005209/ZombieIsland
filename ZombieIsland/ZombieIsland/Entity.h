@@ -50,8 +50,8 @@ public:
 
 
 	//Other Functions
-	virtual void taketurn(void);				//Take a given amount of turns if non specifed take one
-	virtual void move(int);						//Move in a given direction if non specifed take a random one
+	virtual void taketurn(void);			//Take a given amount of turns if non specifed take one
+	virtual void move(int);					//Move in a given direction if non specifed take a random one
 
 };
 

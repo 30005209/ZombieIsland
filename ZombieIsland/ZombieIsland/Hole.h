@@ -5,5 +5,8 @@ class Hole :	public Entity
 public:
 	Hole();
 	~Hole();
+
+	void taketurn(void);
+	void move(int);
 };
 

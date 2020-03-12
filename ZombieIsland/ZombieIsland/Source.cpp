@@ -16,11 +16,22 @@ int main()
 		bool change = false;
 		char key = _getch();
 
-		if (GM.isPlayerControl(key))
+		if (GM.isGameControl(key))
 		{
-			
+
+		}
+		else if (GM.isPlayerControl(key))
+		{
+			GM.performPlayerMoves(key);
+			GM.performMonsterMoves();
 		}
 
+		if (key == 'r')
+		{
+			GM.getCon().clear();
+			GM.randomiseBoard();
+			GM.printBoard();
+		}
 
 	}
 

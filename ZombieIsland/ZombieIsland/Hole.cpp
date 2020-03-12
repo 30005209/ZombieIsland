@@ -11,3 +11,11 @@ Hole::Hole()
 Hole::~Hole()
 {
 }
+
+void Hole::taketurn(void)
+{
+}
+
+void Hole::move(int)
+{
+}

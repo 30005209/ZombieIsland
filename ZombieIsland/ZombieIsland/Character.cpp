@@ -10,9 +10,8 @@ Character::~Character()
 {
 }
 
-void Character::taketurn(char input)
+void Character::taketurn(void)
 {
-	move(int(input));
 }
 
 void Character::move(int direction = Die::roll(4))
