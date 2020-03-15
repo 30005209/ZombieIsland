@@ -10,57 +10,26 @@ GameManager::GameManager()
 
 	for (int i = mon; i > 0; i--)
 	{
-		addEntity(Monster());
+		addEntity('M');
 	}
 
 	for (int i = hol; i > 0; i--)
 	{
-		addEntity(Hole());
+		addEntity('O');
 	}
 
 	for (int i = cha; i > 0; i--)
 	{
-		addEntity(Character());
+		addEntity('C');
 	}
 
 	for (int i = (getRow() * getCol()) - mon - hol - cha; i > 0; i--)
 	{
-		addEntity(Terrain());
+		addEntity();
 	}
 
 	randomiseBoard();
 }
-
-GameManager::GameManager(int row, int col, int mon, int hol, int cha, string controls)
-{
-	setGridSize(row, col);
-	setEntityNums(mon, hol, cha);
-	setControlScheme(controls[0], controls[1], controls[2], controls[3]);
-
-	for (int i = mon; i > 0; i--)
-	{
-		
-		addEntity(Monster());
-	}
-
-	for (int i = hol; i > 0; i--)
-	{
-		addEntity(Hole());
-	}
-
-	for (int i = cha; i > 0; i--)
-	{
-		addEntity(Character());
-	}
-
-	for (int i = (getRow() * getCol()) - mon - hol - cha; i > 0; i--)
-	{
-		addEntity(Hole());
-	}
-
-	randomiseBoard();	
-}
-
 
 GameManager::~GameManager()
 {
@@ -69,7 +38,7 @@ GameManager::~GameManager()
 void GameManager::setGridSize(int numRow, int numCol)
 {
 	this->rows = numRow;
-	this->columns = numCol;
+	this->cols = numCol;
 }
 
 void GameManager::setEntityNums(int numMon, int numHol, int numCha)
@@ -94,7 +63,7 @@ int GameManager::getRow(void)
 
 int GameManager::getCol(void)
 {
-	return this->columns;
+	return this->cols;
 }
 
 int GameManager::getNumMon(void)
@@ -115,16 +84,16 @@ int GameManager::getNumCha(void)
 int GameManager::getRemMon(void)
 {
 	int numRemaining = 0;
-
-	for (vector<Entity>::iterator i = board.begin(); 
+	
+	for (Position i = board.begin();
 		i != board.end(); i++)
 	{
-		if (i->getIsAlive())
+		//if (i->getIsAlive())
 		{
 			numRemaining++;
 		}
 	}
-
+	
 	return numRemaining;
 }
 
@@ -169,19 +138,19 @@ bool GameManager::isGameControl(char)
 	return false;
 }
 
-template<class entityType>
-void GameManager::addEntity(entityType newEntity)
-{
-	static int codeCounter = 1;
-	newEntity.setCode(codeCounter++);
-	board.emplace_back(newEntity);
 
+void GameManager::addEntity(char symbol)
+{	
+	static int codeCounter = 1;
+	Entity newEntity(symbol);
+	board.emplace_back(newEntity);
+   
 }
 
 void GameManager::printBoard(void)
 {
 	vector<Entity>::iterator iterBoard = board.begin();
-
+	
 	for (int i = 0; iterBoard != board.end(); iterBoard++, i++)
 	{
 		if (i != 0)
@@ -207,44 +176,44 @@ void GameManager::randomiseBoard(void)
 
 void GameManager::performPlayerMoves(char move)
 {
-	//Convert the movement char into a direction
-	int direction;
-
-	if (move == getUp())
-	{
-		direction = 1;
-	}
-	else if (move == getLeft())
-	{
-		direction = 2;
-	}
-	else if (move == getDown())
-	{
-		direction = 3;
-	}
-	else if (move == getRight())
-	{
-		direction = 4;
-	}
-
-
-	//Find player
-	for (vector<Entity>::iterator i = board.begin();
-		i != board.end(); i++)
-	{
-		if (i->getSymbol() == 'C')
-		{
-			//Character *T =&board[3];
-			
-			//Convert the move into the direction then move that way
-
-			/*Character(i).move(direction);*/
-
-
-		}
-	}
-
-	//Perform their actions
+	////Convert the movement char into a direction
+	//int direction;
+	//
+	//if (move == getUp())
+	//{
+	//	direction = 1;
+	//}
+	//else if (move == getLeft())
+	//{
+	//	direction = 2;
+	//}
+	//else if (move == getDown())
+	//{
+	//	direction = 3;
+	//}
+	//else if (move == getRight())
+	//{
+	//	direction = 4;
+	//}
+	//
+	//
+	////Find player
+	//for (vector<Entity>::iterator i = board.begin();
+	//	i != board.end(); i++)
+	//{
+	//	if (i->getSymbol() == 'C')
+	//	{
+	//		//Character *T =&board[3];
+	//
+	//		//Convert the move into the direction then move that way
+	//
+	//		/*Character(i).move(direction);*/
+	//
+	//
+	//	}
+	//}
+	//
+	////Perform their actions
 }
 
 void GameManager::performMonsterMoves(void)
