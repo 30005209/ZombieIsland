@@ -20,7 +20,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{607AE0CE-A941-479B-A735-EC87A4D23295}</ProjectGuid>
+    <ProjectGuid>{56692A2C-D2CD-4786-B1A7-D2C9993A57E9}</ProjectGuid>
     <RootNamespace>ZombieIsland</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
@@ -115,29 +115,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Character.cpp" />
     <ClCompile Include="console.cpp" />
     <ClCompile Include="Die.cpp" />
     <ClCompile Include="Entity.cpp" />
-    <ClCompile Include="Hole.cpp" />
-    <ClCompile Include="Monster.cpp" />
-    <ClCompile Include="Moveable.cpp" />
+    <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="Source.cpp" />
-    <ClCompile Include="Tile.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Brief.txt" />
-    <Text Include="Pseudocode.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Character.h" />
     <ClInclude Include="console.h" />
     <ClInclude Include="Die.h" />
     <ClInclude Include="Entity.h" />
-    <ClInclude Include="Hole.h" />
-    <ClInclude Include="Monster.h" />
-    <ClInclude Include="Moveable.h" />
-    <ClInclude Include="Tile.h" />
+    <ClInclude Include="GameManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
