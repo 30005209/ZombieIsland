@@ -16,16 +16,6 @@ Entity::~Entity()
 {
 }
 
-void Entity::setBrd(vector<Entity>* newBoard)
-{
-	this->ptrBoard = newBoard;
-}
-
-void Entity::setPos(Position newPos)
-{
-	this->pos = newPos;
-}
-
 void Entity::setSym(char newSym)
 {
 	this->symbol = newSym;
@@ -56,25 +46,76 @@ bool Entity::getHasChanged(void)
 	return this->hasChanged;
 }
 
-vector<Entity>* Entity::getBoard(void)
+Entity * Entity::getSelf(void)
 {
-	return this->ptrBoard;
+	return this;
 }
 
-Position Entity::getPos(void)
+void Entity::encounter(Entity* other)
 {
-	return this->pos;
-}
+	//If this is a monster...
+	if (this->getSymbol() == 'M')
+	{
+		//Decide behaviour based on what its encountering
+		switch (other->getSymbol())
+		{
+		//If its a blank space swap them
+		case ' ':
+			this->setSym(' ');
+			other->setSym('M');
+			this->setChanged(true);
+			other->setChanged(true);
+			break;
 
-void Entity::taketurn(void)
-{
-}
+		//If its a hole kill self
+		case 'O':
+			this->setSym(' ');
+			this->setChanged(true);
+			break;
 
-void Entity::move(int)
-{
-}
+		//If its a monster do nothing (can be seen as swapping or bouncing off)
+		case 'M':
+			break;
 
-void Entity::encounter(Entity other)
-{
+		//If its the player kill the player
+		case 'C':
+			other->setSym('X');
+			other->setChanged(true);
+			break;
+
+		}
+	}
+
+	//If this is the player...
+	else if (this->getSymbol() == 'C')
+	{
+		//Decide behaviour based on what its encountering
+		switch (other->getSymbol())
+		{
+			//If its a blank space swap them
+		case ' ':
+			this->setSym(' ');
+			other->setSym('C');
+			this->setChanged(true);
+			other->setChanged(true);
+			break;
+
+			//If its a hole kill self
+		case 'O':
+			this->setSym(' ');
+			this->setChanged(true);
+			break;
+
+			//If its a monster kill self
+		case 'M':
+			this->setSym('X');
+			this->setChanged(true);
+			break;
+		}
+	}
+	else
+	{
+
+	}
 }
 
