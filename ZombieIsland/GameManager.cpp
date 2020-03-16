@@ -345,6 +345,10 @@ void GameManager::enableMovement(void)
 	for (Position i = board.begin();
 		i != board.end(); i++)
 	{
+		if (i->getSymbol() == '#')
+		{
+			i->setSym(' ');
+		}
 		i->setChanged(false);
 	}
 }

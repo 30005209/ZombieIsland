@@ -83,6 +83,10 @@ void Entity::encounter(Entity* other)
 			other->setChanged(true);
 			break;
 
+		case '#':
+			this->setSym(' ');
+			other->setSym('0');
+			this->setChanged(true);
 		}
 	}
 
@@ -94,7 +98,7 @@ void Entity::encounter(Entity* other)
 		{
 			//If its a blank space swap them
 		case ' ':
-			this->setSym(' ');
+			this->setSym('#');
 			other->setSym('C');
 			this->setChanged(true);
 			other->setChanged(true);
@@ -111,6 +115,11 @@ void Entity::encounter(Entity* other)
 			this->setSym('X');
 			this->setChanged(true);
 			break;
+
+		case '#':
+			this->setSym(' ');
+			other->setSym('0');
+			this->setChanged(true);
 		}
 	}
 	else
