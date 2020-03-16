@@ -390,6 +390,8 @@ void GameManager::printScoreboard(void)
 void GameManager::playTurn(void)
 {
 	bool change = false;
+	bool doubleMove = (getTurn() & 2);
+
 	//Get key
 	char key = _getch();
 	
@@ -404,7 +406,7 @@ void GameManager::playTurn(void)
 	//else if its a player control
 	else if (isPlayerControl(key))
 	{
-		performPlayerMoves(key);
+		performPlayerMoves(key);		
 		performMonsterMoves();
 		change = true;
 		key = ' ';

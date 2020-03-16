@@ -9,6 +9,7 @@ using std::endl;
 
 //THINGS TO ADD
 //Sort highscores
+//Add if highscore.txt not there -> create one
 //The monsters are to try and capture the character by landing on the same location as the main character.
 //	The monsters will need some simple strategy to move towards the character and not simply move in a random direction.
 
@@ -98,13 +99,24 @@ int main()
 		GM.playTurn();
 	}
 
+	int score = 0;
+	for (vector<Entity>::iterator i = GM.getBoard()->begin();
+		i != GM.getBoard()->end();
+		i++)
+	{
+		if (i->getSymbol() == '0')
+		{
+			++score;
+		}
+	}
+
 	if (GM.monstersRemain())
 	{
 		cout << "\nya died";
 		outFile.open("Highscore.txt", std::ios::in |std::ios::binary);
 		outFile << "HIGHSCORES\n";
 		outFile.seekp(0, std::ios::end);
-		outFile << name << ": " << GM.getTurn() << "\n";
+		outFile << name << ": " << score << "\n";
 		outFile.close();
 	}
 	else
@@ -113,7 +125,7 @@ int main()
 		cout << "\nya died";
 		outFile.open("Highscore.txt");
 		outFile._Seekend;
-		outFile << "Score: " << GM.getTurn() * 2 << "\n";
+		outFile << "Score: " << score * 2 << "\n";
 		outFile.close();
 	}
 
