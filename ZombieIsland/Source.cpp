@@ -1,5 +1,6 @@
 #include "GameManager.h"
 #include <iostream>
+#include <fstream>
 
 using std::cout;
 using std::cin;
@@ -7,14 +8,16 @@ using std::endl;
 
 
 //THINGS TO ADD
-//Create a log file that records the name of anybody who uses the game and the result of each game they play
-//	(make sure this list is appended and stores all of the name of the people that have played the game) 
+//Sort highscores
 //The monsters are to try and capture the character by landing on the same location as the main character.
 //	The monsters will need some simple strategy to move towards the character and not simply move in a random direction.
 
 int main()
 {
+	std::ifstream inFile;
+	std::ofstream outFile;
 	GameManager GM;
+	string name;
 
 	bool gameSet = false;
 
@@ -67,6 +70,17 @@ int main()
 			cin.ignore();
 		}
 
+		bool validName = false;
+		
+		while (!validName)
+		{
+			GM.getCon().clear();
+			cout << "What would you like your name to be?[max 10]";
+			cin >> name;
+
+			validName = name.size() <= 10;
+		}
+
 		GM.setGridSize(tempRow, tempCol);
 		GM.setFromDiffilculty(tempDif);
 		gameSet = true;
@@ -87,12 +101,23 @@ int main()
 	if (GM.monstersRemain())
 	{
 		cout << "\nya died";
+		outFile.open("Highscore.txt", std::ios::in |std::ios::binary);
+		outFile << "HIGHSCORES\n";
+		outFile.seekp(0, std::ios::end);
+		outFile << name << ": " << GM.getTurn() << "\n";
+		outFile.close();
 	}
 	else
 	{
-		cout << "\nfair play";
+		cout << "\nfair play"; 
+		cout << "\nya died";
+		outFile.open("Highscore.txt");
+		outFile._Seekend;
+		outFile << "Score: " << GM.getTurn() * 2 << "\n";
+		outFile.close();
 	}
 
+	cin.ignore();
 	cin.get();
 
 	return 0;
