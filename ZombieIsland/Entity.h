@@ -14,7 +14,6 @@ private:
 	typedef vector<Entity>::iterator Position;
 
 	char symbol;									//The symbol being displayed
-	Position pos;									//Positon on the board stored as an iterator
 	bool hasChanged;								//Notes whether the Entity has changed since it was last printed
 	int baseMove;									//Denotes the standard number of turns
 
@@ -35,7 +34,7 @@ public:
 	int getBaseMove(void);							//Gets the base movement value
 	bool getHasChanged(void);						//Get haschanged
 	Entity* getSelf(void);							//Gets a pointer to self
-
+	
 
 	//Other Functions
 	void encounter(Entity* other);					//Handles encounters with another entity

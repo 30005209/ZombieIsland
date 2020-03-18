@@ -22,7 +22,7 @@ private:
 	//To help legibility Position will be used when refering to the board
 	typedef vector<Entity>::iterator Position;
 
-	Console con;	//The Console class
+	Console con;			//The Console class
 
 	vector<Entity> board;	//The Board being played on
 
@@ -58,9 +58,9 @@ public:
 
 	//Geetters
 
-	int getRow(void);										//Get the row size
-	int getCol(void);										//Get the column size
-	int getTurn(void);
+	int getRowNo(void);										//Get the row size
+	int getColNo(void);										//Get the column size
+	int getTurn(void);	
 
 
 	int getNumMon(void);									//Get the number of monsters
@@ -87,7 +87,7 @@ public:
 
 	//Other functions
 
-	bool monstersRemain(void);									//Is the game over
+	bool monstersRemain(void);								//Is the game over
 	bool playerIsAlive(void);
 	bool isPlayerControl(char);								//Check if its a control for the player
 	bool isGameControl(char);								//Check if its a game control
@@ -102,7 +102,19 @@ public:
 	void performPlayerMoves(char);							//Performs all the moves for Players
 	void performMonsterMoves(void);							//Performs all the moves for Monsters
 
-	void moveEntity(Entity*,int);								//Performs a movement action for the given entity
+	void moveEntity(Entity*,int);							//Performs a movement action for the given entity in the given direction
+
+	bool isOnRowEdgeL(Entity*);								//Returns whether the entity is on the left edge  
+	bool isOnRowEdgeR(Entity*);								//Returns whether the entity is on the right edge  
+	bool isOnColEdgeT(Entity*);								//Returns whether the entity is on the left edge
+	bool isOnColEdgeB(Entity*);								//Returns whether the entity is on the right edge
+
+
+	int getPos(Entity*);									//Finds the current position of the given entity
+	int getRow(Entity*);									//Finds the current row of the given entity
+	int getCol(Entity*);									//Finds the current col of the given entity
+
+	void decideDirection(Entity*);							//If within 
 
 	void enableMovement(void);
 

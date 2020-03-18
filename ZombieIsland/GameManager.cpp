@@ -47,8 +47,8 @@ void GameManager::setFromDiffilculty(int diff)
 {
 	this->difficulty = diff;
 	this->difficultyMod = diff * 2;
-	mon = int((getRow() * getCol()) /  (10 - difficultyMod));
-	hol = int((getRow() * getCol()) / (15 - difficultyMod));
+	mon = int((getRowNo() * getColNo()) /  (10 - difficultyMod));
+	hol = int((getRowNo() * getColNo()) / (15 - difficultyMod));
 	cha = 1;
 
 	for (int i = mon; i > 0; i--)
@@ -66,7 +66,7 @@ void GameManager::setFromDiffilculty(int diff)
 		addEntity('C');
 	}
 
-	for (int i = (getRow() * getCol()) - mon - hol - cha; i > 0; i--)
+	for (int i = (getRowNo() * getColNo()) - mon - hol - cha; i > 0; i--)
 	{
 		addEntity();
 	}
@@ -74,12 +74,12 @@ void GameManager::setFromDiffilculty(int diff)
 	difficultyMod++;
 }
 
-int GameManager::getRow(void)
+int GameManager::getRowNo(void)
 {
 	return this->rows;
 }
 
-int GameManager::getCol(void)
+int GameManager::getColNo(void)
 {
 	return this->cols;
 }
@@ -203,7 +203,7 @@ void GameManager::printBoard(void)
 	
 	cout << " ";
 
-	for (int i = getCol(); i > 0; i--)
+	for (int i = getColNo(); i > 0; i--)
 	{
 		cout << "_";
 	}
@@ -215,7 +215,7 @@ void GameManager::printBoard(void)
 	{
 		if (i != 0)
 		{
-			if (!(i % getCol()))
+			if (!(i % getColNo()))
 			{
 				cout << "|\n|";
 			}
@@ -298,6 +298,7 @@ void GameManager::performMonsterMoves(void)
 			{
 				moveEntity(i->getSelf(), Die::roll(4)-1);
 				i->setChanged(true);
+
 			}
 		}
 	}
@@ -309,19 +310,38 @@ void GameManager::moveEntity(Entity* theEntity, int direction)
 {
 	Entity * encountered = theEntity;
 
+	//If the direction would cause the entity to go off the edge the opposite direction is chosen
+	if (isOnColEdgeT(theEntity) && direction == 0)
+	{
+		direction = 1;
+	}
+	else if (isOnColEdgeB(theEntity) && direction == 1)
+	{
+		direction = 0;
+	}
+
+	if (isOnRowEdgeL(theEntity) && direction == 2)
+	{
+		direction = 3;
+	}
+	else if (isOnRowEdgeR(theEntity) && direction == 3)
+	{
+		direction = 2;
+	}
+	
 	//Decide what it is encountering
 	switch (direction)
 	{
 	//Move Up
 	case 0:
 		//Set position to the position it is at - the total number of columns 
-		encountered = (theEntity - this->getCol());
+		encountered = (theEntity - this->getColNo());
 		break;
 
 	//Move Down
 	case 1:
 		//Set position to the position it is at + the total number of columns
-		encountered = (theEntity + this->getCol());
+		encountered = (theEntity + this->getColNo());
 		break;
 
 	//Move Left
@@ -338,6 +358,77 @@ void GameManager::moveEntity(Entity* theEntity, int direction)
 	}
 	
 	theEntity->encounter(encountered);
+}
+
+bool GameManager::isOnRowEdgeR(Entity * looking)
+{
+	//return if the Entity is on the Left Edge
+	return (getCol(looking) == getColNo()-1);
+}
+
+bool GameManager::isOnRowEdgeL(Entity * looking)
+{
+	//return if the Entity is on the Right Edge
+	return (getCol(looking) == getColNo());
+}
+
+bool GameManager::isOnColEdgeB(Entity * looking)
+{
+	//Return if the Entity is on the top row
+	return (getRow(looking) == getRowNo() - 1);
+}
+
+bool GameManager::isOnColEdgeT(Entity * looking)
+{
+	//Return if the Entity is on the bottom row
+	return (getRow(looking) == 0);
+}
+
+int GameManager::getPos(Entity * looking)
+{
+	int x = 0;
+
+	//Loop through the entity to find where it is in the board
+	for (vector<Entity>::iterator pos = board.begin();
+		pos != board.end();	pos++)
+	{
+		if (looking == pos->getSelf())
+		{
+			return x;
+		}
+		x++;
+	}
+
+	//if not found return -1 as a sentiel
+	return -1;
+}
+
+int GameManager::getRow(Entity *looking)
+{
+	int x = getPos(looking);
+	int row = 0;
+
+	//while x > the size of a row remove a row and increment the count
+	while ((x - getRowNo()) > 0)
+	{
+		x -= getRowNo();
+		row++;
+	}
+
+	return row;
+}
+
+int GameManager::getCol(Entity *looking)
+{
+	int x = getPos(looking);
+
+	//- the amount of the row until doing so would make the amound -ve
+	while ((x - getRowNo()) > 0)
+	{
+		x -= getRowNo();
+	}
+
+	return x;
 }
 
 void GameManager::enableMovement(void)
@@ -357,14 +448,14 @@ void GameManager::printScoreboard(void)
 {
 	cout << "\n";
 
-	for (int i = getCol()+2; i > 0; i--)
+	for (int i = getColNo()+2; i > 0; i--)
 	{
 		cout << "=";
 	}
 
 	cout << "\n|Mons: " << getRemMon();
 
-	for (int i = getCol() - con.getCursorPosition().X +1;
+	for (int i = getColNo() - con.getCursorPosition().X +1;
 		i > 0; i--)
 	{
 		cout << " ";
@@ -372,7 +463,7 @@ void GameManager::printScoreboard(void)
 
 	cout << "|\n|Turn: " << getTurn();
 
-	for (int i = getCol() - con.getCursorPosition().X + 1;
+	for (int i = getColNo() - con.getCursorPosition().X + 1;
 		i > 0; i--)
 	{
 		cout << " ";
@@ -380,7 +471,7 @@ void GameManager::printScoreboard(void)
 
 	cout << "|\n";
 
-	for (int i = getCol()+2; i > 0; i--)
+	for (int i = getColNo()+2; i > 0; i--)
 	{
 		cout << "=";
 	}
@@ -431,6 +522,7 @@ void GameManager::playTurn(void)
 
 		printBoard();
 		printScoreboard();
+	
 	}
 }
 
