@@ -25,34 +25,88 @@ int main()
 	while (!gameSet)
 	{
 		GM.getCon().clear();
-		
-		bool validRow = false;
+
+		bool custom = false;
+		bool chosen = false;
+
+		cout << "Welcome to Zombie Island" << endl;
+		cout << "Press a key to begin..." << endl;
+		cin.get();
+
 		int tempRow = 9;
-
-		while (!validRow)
-		{
-			GM.getCon().clear();
-			cout << "How many rows do you want?: ";
-			cin >> tempRow;
-
-			validRow = (tempRow >= 10 && tempRow <= 20);
-			cin.ignore();
-		}
-
-		bool validCol = false;
 		int tempCol = 9;
 
-		while (!validCol)
+		while (!chosen)
 		{
 			GM.getCon().clear();
-			cout << "How many columns do you want?: ";
-			cin >> tempCol;
 
-			validCol = (tempCol >= 10 && tempCol <= 40);
+			cout << "What size map would you like?" << endl;
+			cout << "1. Small [10x10]" << endl;
+			cout << "2. Medium [15x15]" << endl;
+			cout << "3. Large [20x20]" << endl;
+			cout << "4. Custom [10-30 x 10-30]" << endl;
 
-			cin.ignore();
+			int x = 0;
+			cin >> x;
+			
+			switch (x)
+			{
+			case 1:
+				tempRow = 10;
+				tempCol = 10;
+				chosen = true;
+				break;
+
+			case 2:
+				tempRow = 15;
+				tempCol = 15;
+				chosen = true;
+				break;
+
+			case 3:
+				tempRow = 20;
+				tempCol = 20;
+				chosen = true;
+				break;
+
+			case 4:
+				custom = true;
+				chosen = true;
+				break;
+
+			default:			
+				cin.ignore();
+				break;
+			}
 		}
 
+		//Custom 
+		if (custom)
+		{
+			bool validRow = false;
+			while (!validRow)
+			{
+				GM.getCon().clear();
+				cout << "How many rows do you want?: ";
+				cin >> tempRow;
+
+				validRow = (tempRow >= 10 && tempRow <= 30);
+				cin.ignore();
+			}
+
+			bool validCol = false;
+
+			while (!validCol)
+			{
+				GM.getCon().clear();
+				cout << "How many columns do you want?: ";
+				cin >> tempCol;
+
+				validCol = (tempCol >= 10 && tempCol <= 30);
+
+				cin.ignore();
+			}
+		}
 
 		bool validDifficulty = false;
 		int tempDif;
@@ -88,6 +142,7 @@ int main()
 		GM.randomiseBoard();
 
 		GM.getCon().clear();
+		GM.updateInfo();
 	}
 
 	GM.printBoard();
@@ -96,18 +151,8 @@ int main()
 	//While there are monsters remaining and the player is alive - play
 	while (GM.monstersRemain() && GM.playerIsAlive())
 	{
+		GM.updateInfo();
 		GM.playTurn();
-	}
-
-	int score = 0;
-	for (vector<Entity>::iterator i = GM.getBoard()->begin();
-		i != GM.getBoard()->end();
-		i++)
-	{
-		if (i->getSymbol() == '0')
-		{
-			++score;
-		}
 	}
 
 	if (GM.monstersRemain())
@@ -116,16 +161,15 @@ int main()
 		outFile.open("Highscore.txt", std::ios::in |std::ios::binary);
 		outFile << "HIGHSCORES\n";
 		outFile.seekp(0, std::ios::end);
-		outFile << name << ": " << score << "\n";
+		outFile << name << ": " << GM.getScore() << "\n";
 		outFile.close();
 	}
 	else
 	{
 		cout << "\nfair play"; 
-		cout << "\nya died";
 		outFile.open("Highscore.txt");
 		outFile._Seekend;
-		outFile << "Score: " << score * 2 << "\n";
+		outFile << "Score: " << GM.getScore() * 2 << "\n";
 		outFile.close();
 	}
 

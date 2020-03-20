@@ -30,12 +30,13 @@ void GameManager::setEntityNums(int numMon, int numHol, int numCha)
 	this->cha = numCha;
 }
 
-void GameManager::setControlScheme(char newUp, char newDown ,char newLeft, char newRight)
+void GameManager::setControlScheme(char newUp, char newDown ,char newLeft, char newRight, char newAmb)
 {
 	this->up = newUp;
 	this->left = newLeft;
 	this->down = newDown;
 	this->right = newRight;
+	this->ambush = newAmb;
 }
 
 void GameManager::setTurn(int newTurn)
@@ -89,6 +90,11 @@ int GameManager::getTurn(void)
 	return this->turn;
 }
 
+int GameManager::getScore(void)
+{
+	return this->score;
+}
+
 int GameManager::getNumMon(void)
 {
 	return this->mon;
@@ -103,6 +109,7 @@ int GameManager::getNumCha(void)
 {
 	return this->cha;
 }
+
 
 Entity * GameManager::getEntity(Position givenPos)
 {
@@ -152,6 +159,11 @@ char GameManager::getRight(void)
 	return this->right;
 }
 
+char GameManager::getAmbush(void)
+{
+	return this->ambush;
+}
+
 Console & GameManager::getCon(void)
 {
 	return con;
@@ -179,7 +191,8 @@ bool GameManager::playerIsAlive(void)
 bool GameManager::isPlayerControl(char entry)
 {
 	return (entry == getUp() || entry == getDown()
-		|| entry == getLeft() || entry == getRight());
+		|| entry == getLeft() || entry == getRight()
+		|| entry == getAmbush());
 }
 
 bool GameManager::isGameControl(char key)
@@ -254,19 +267,36 @@ void GameManager::performPlayerMoves(char move)
 	{
 		direction = 0;
 	}
-	else if (move == getDown())
+	else if (move == getRight())
 	{
 		direction = 1;
 	}
-	else if (move == getLeft())
+	else if (move == getDown())
 	{
 		direction = 2;
 	}
-	else if (move == getRight())
+	else if (move == getLeft())
 	{
 		direction = 3;
 	}
-	
+	else if(move == getAmbush())
+	{
+		if (player->getCanAmbush())
+		{
+			(player - 1)->setSym('#');
+			(player + 1)->setSym('#');
+			(player - getColNo())->setSym('#');
+			(player + getColNo())->setSym('#');
+			direction = -1;
+			player->setCanAmbush(false);
+		}
+		else
+		{
+			direction = Die::roll(4) - 1;
+		}
+
+	}
+
 	
 	//Find player
 	for (Position i = board.begin();
@@ -287,16 +317,17 @@ void GameManager::performPlayerMoves(char move)
 
 void GameManager::performMonsterMoves(void)
 {
-	//Find player
+	//Find Monster
 	for (vector<Entity>::iterator i = board.begin();
 		i != board.end(); i++)
 	{
 		if (i->getSymbol() == 'M')
 		{
-			//Perform move in the given direction
+			//Perform move in a direction chosen by the entity
 			if (!i->getHasChanged())
 			{
-				moveEntity(i->getSelf(), Die::roll(4)-1);
+				decideEnemyMovement(i->getSelf());
+				moveEntity(i->getSelf());
 				i->setChanged(true);
 
 			}
@@ -310,23 +341,30 @@ void GameManager::moveEntity(Entity* theEntity, int direction)
 {
 	Entity * encountered = theEntity;
 
+
+	//If no value has been given decide based on the desires of the entity
+	if (direction == 999)
+	{
+		direction = theEntity->getPredomDesire();
+	}
+
 	//If the direction would cause the entity to go off the edge the opposite direction is chosen
 	if (isOnColEdgeT(theEntity) && direction == 0)
 	{
-		direction = 1;
+		direction = 2;
 	}
-	else if (isOnColEdgeB(theEntity) && direction == 1)
+	else if (isOnColEdgeB(theEntity) && direction == 2)
 	{
 		direction = 0;
 	}
 
-	if (isOnRowEdgeL(theEntity) && direction == 2)
+	if (isOnRowEdgeL(theEntity) && direction == 3)
+	{
+		direction = 1;
+	}
+	else if (isOnRowEdgeR(theEntity) && direction == 1)
 	{
 		direction = 3;
-	}
-	else if (isOnRowEdgeR(theEntity) && direction == 3)
-	{
-		direction = 2;
 	}
 	
 	//Decide what it is encountering
@@ -338,26 +376,34 @@ void GameManager::moveEntity(Entity* theEntity, int direction)
 		encountered = (theEntity - this->getColNo());
 		break;
 
-	//Move Down
+	//Move Right
 	case 1:
 		//Set position to the position it is at + the total number of columns
+		encountered = (theEntity + 1);
+		break;
+
+	//Move Down
+	case 2:
+		//Set the position to the position before (-1)
 		encountered = (theEntity + this->getColNo());
 		break;
 
 	//Move Left
-	case 2:
-		//Set the position to the position before (-1)
-		encountered = (theEntity -1);
-		break;
-
-	//Move Right
 	case 3:
 		//Set the potiion to the postion after (+1)
-		encountered = (theEntity +1);
+		encountered = (theEntity - 1);
 		break;
 	}
 	
-	theEntity->encounter(encountered);
+	//If the player has ambushed no encounter will take place so do nothing
+	if (direction == -1)
+	{
+
+	}
+	else
+	{
+		theEntity->encounter(encountered);
+	}
 }
 
 bool GameManager::isOnRowEdgeR(Entity * looking)
@@ -431,6 +477,14 @@ int GameManager::getCol(Entity *looking)
 	return x;
 }
 
+void GameManager::decideEnemyMovement(Entity *current)
+{
+	//+ve is left, -ve is right
+	//+ve is up, -ve is down
+	current->setDesires(getCol(current) - getCol(player->getSelf()),
+						getRow(current) - getRow(player->getSelf()));		
+}
+
 void GameManager::enableMovement(void)
 {
 	for (Position i = board.begin();
@@ -453,7 +507,7 @@ void GameManager::printScoreboard(void)
 		cout << "=";
 	}
 
-	cout << "\n|Mons: " << getRemMon();
+	cout << "\n|Mons:  " << getRemMon();
 
 	for (int i = getColNo() - con.getCursorPosition().X +1;
 		i > 0; i--)
@@ -461,7 +515,7 @@ void GameManager::printScoreboard(void)
 		cout << " ";
 	}
 
-	cout << "|\n|Turn: " << getTurn();
+	cout << "|\n|Turn:  " << getTurn();
 
 	for (int i = getColNo() - con.getCursorPosition().X + 1;
 		i > 0; i--)
@@ -469,8 +523,35 @@ void GameManager::printScoreboard(void)
 		cout << " ";
 	}
 
-	cout << "|\n";
+	cout << "|\n|Kills: " << getScore();
 
+	for (int i = getColNo() - con.getCursorPosition().X + 1;
+		i > 0; i--)
+	{
+		cout << " ";
+	}
+
+	cout << "|\n|";
+
+	if (player->getCanAmbush())
+	{
+		con.setColour(con.GREEN);
+	}
+	else
+	{
+		con.setColour(con.RED);
+	}
+	cout << "Amush " << getScore();
+
+	for (int i = getColNo() - con.getCursorPosition().X + 1;
+		i > 0; i--)
+	{
+		cout << " ";
+	}
+
+	con.setColour(con.WHITE);
+
+	cout << "|\n";
 	for (int i = getColNo()+2; i > 0; i--)
 	{
 		cout << "=";
@@ -482,6 +563,7 @@ void GameManager::playTurn(void)
 {
 	bool change = false;
 	bool doubleMove = (getTurn() & 2);
+
 
 	//Get key
 	char key = _getch();
@@ -522,7 +604,6 @@ void GameManager::playTurn(void)
 
 		printBoard();
 		printScoreboard();
-	
 	}
 }
 
@@ -551,4 +632,27 @@ void GameManager::increaseDif(void)
 	{
 		addMonster();
 	}
+}
+
+void GameManager::updateInfo(void)
+{
+	//Update positions of the player
+	for (Position checkPoint = board.begin(); checkPoint != board.end(); checkPoint++)
+	{
+		if (checkPoint->getSymbol() == 'C')
+		{
+			player = checkPoint;
+		}
+
+		if (checkPoint->getSymbol() == '0')
+		{
+			score++;
+			checkPoint->setSym(' ');
+			if (!(score % 5))
+			{
+				player->setCanAmbush(true);
+			}
+		}
+	}
+
 }
