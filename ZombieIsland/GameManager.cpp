@@ -7,10 +7,7 @@ GameManager::GameManager()
 	setGridSize();
 	setEntityNums();
 	setControlScheme();
-
 	setTurn(1);
-
-	randomiseBoard();
 }
 
 GameManager::~GameManager()
@@ -93,6 +90,21 @@ int GameManager::getTurn(void)
 int GameManager::getScore(void)
 {
 	return this->score;
+}
+
+int GameManager::getSpeedVar(void)
+{
+	return this->gameSpeedVar;
+}
+
+int GameManager::getSpeedBase(void)
+{
+	return this->gameSpeedBase;
+}
+
+string GameManager::getName(void)
+{
+	return this->name;
 }
 
 int GameManager::getNumMon(void)
@@ -184,12 +196,23 @@ bool GameManager::isPlayerControl(char entry)
 		|| entry == getAmbush());
 }
 
-bool GameManager::isGameControl(char key)
-{
-	return false; //(key == getUp() || key == getDown() || key == getLeft() || key == getRight());
 
+//Sleep by a dice roll which is the variance + a base speed
+//To stop it being too slow/too long
+void GameManager::randomSlow(void)
+{
+	Sleep(Die::roll(getSpeedVar()) + getSpeedBase());
 }
 
+//Randomly slow between each character in a given string
+void GameManager::typeWrite(string text)
+{
+	for (int i = 0; i < int(text.length()); i++)
+	{
+		randomSlow();
+		std::cout << text[i];
+	}
+}
 
 void GameManager::addEntity(char symbol)
 {
@@ -255,6 +278,10 @@ void GameManager::printBoard(void)
 
 void GameManager::randomiseBoard(void)
 {
+	con.clear();
+	typeWrite("Now here's how I heard it went...");
+	Sleep(500);
+
 	for (int i = Die::roll(); i > 0; i--)
 	{
 		std::random_shuffle(board.begin(), board.end());
@@ -342,7 +369,6 @@ void GameManager::performMonsterMoves(void)
 			//Perform move in a direction chosen by the entity
 			if (!(*i)->getHasChanged())
 			{
-
 				decideEnemyMovement((*i)->getSelf());
 				moveEntity(i);
 				(*i)->setChanged(true);
@@ -363,7 +389,7 @@ void GameManager::moveEntity(vector<Entity*>::iterator theEntity, int direction)
 		{
 			direction = (*theEntity)->getPredomDesire();
 		}
-
+		
 		Entity * encountered = (*theEntity);
 
 
@@ -551,12 +577,13 @@ void GameManager::printScoreboard(void)
 	if ((*player)->getCanAmbush())
 	{
 		con.setColour(con.GREEN);
+		cout << "Ambush";
 	}
 	else
 	{
 		con.setColour(con.RED);
+		cout << "Charging";
 	}
-	cout << "Ambush " << getScore();
 
 	for (int i = getColNo() - con.getCursorPosition().X + 1;
 		i > 0; i--)
@@ -586,13 +613,9 @@ void GameManager::playTurn(void)
 	//Enable movement for everyone
 	enableMovement();
 
-	//if its a game control
-	if (isGameControl(key))
-	{
 
-	}
 	//else if its a player control
-	else if (isPlayerControl(key))
+	if (isPlayerControl(key))
 	{
 		performPlayerMoves(key);
 		performMonsterMoves();
@@ -780,4 +803,197 @@ void GameManager::swapEnts(Entity *source, Entity *other)
 
 	}
 
+}
+
+void GameManager::setUp(void)
+{
+	bool gameSet = false;
+
+	while (!gameSet)
+	{
+		getCon().setWindowSize(600, 450);
+		getCon().setWindowTitle("Zombie Island");
+		getCon().clear();
+
+		bool custom = false;
+		bool chosen = false;
+
+		typeWrite("Welcome to Zombie Island\n");
+		typeWrite("Press Enter to begin...");
+		cin.get();
+		con.clear();
+
+		int tempRow = -1;
+		int tempCol = -1;
+
+		while (!chosen)
+		{
+			bool decided = false;
+			int distance = -1;
+			while (!decided)
+			{
+
+				typeWrite("Lets start with the basics...\nHow far are you traveling?\n");
+				typeWrite("1. Only round the block [10 x 10]\n");
+				typeWrite("2. Supermarket's not far [15 x 15]\n");
+				typeWrite("3. Be back before dark [20 x 20]\n");
+				typeWrite("4. Business is my own [10-20 x 10-20]\n");
+
+				cin >> distance;
+
+				while (!cin >> distance || distance >4 || distance <=0)
+				{
+					typeWrite("C'mon speak up...\n");
+					cin.clear();
+					cin.ignore(123, '\n');
+					cin >> distance;
+				}
+
+				if (distance == 1 || distance == 2
+					|| distance == 3 || distance == 4)
+				{
+					decided = true;
+				}
+			}
+			switch (distance)
+			{
+			case 1:
+				tempRow = 10;
+				tempCol = 10;
+				chosen = true;
+				break;
+
+			case 2:
+				tempRow = 15;
+				tempCol = 15;
+				chosen = true;
+				break;
+
+			case 3:
+				tempRow = 20;
+				tempCol = 20;
+				chosen = true;
+				break;
+
+			case 4:
+				custom = true;
+				chosen = true;
+				break;
+
+			default:
+				cin.ignore();
+				break;
+			}
+		}
+
+		//Custom 
+		if (custom)
+		{
+			bool validRow = false;
+			while (!validRow)
+			{
+				typeWrite("How far east are you planning\n");
+				
+				cin >> tempRow;
+
+				while (!cin >> tempRow || tempRow > 20| tempRow < 10)
+				{
+						typeWrite("What was that?\n");
+						cin.clear();
+						cin.ignore(123, '\n');
+						cin >> tempRow;
+				}
+	
+				cin >> tempRow;
+				validRow = (tempRow >= 10 && tempRow <= 20);
+			}
+
+			bool validCol = false;
+
+			while (!validCol)
+			{
+				typeWrite("How far south are you going?\n");
+
+				cin >> tempCol;
+				while (!cin >> tempCol || tempCol > 20 || tempCol < 10)
+				{
+					typeWrite("I'm sorry...what did you say?\n");
+					cin.clear();
+					cin.ignore(123, '\n');
+					cin >> tempCol;
+				}
+
+				validCol = (tempCol >= 10 && tempCol <= 20);
+			}
+		}
+
+		bool validDifficulty = false;
+		int tempDif = -1;
+		while (!validDifficulty)
+		{
+			getCon().clear();
+			typeWrite("There many of them out there?\n");
+			typeWrite("1. Not so many\n");
+			typeWrite("2. More than usual...\n");
+			typeWrite("3. I reckon the whole horde...\n");
+
+			cin >> tempDif;
+
+			while (!cin >> tempDif || tempDif > 3 || tempDif < 1)
+			{
+				typeWrite("How many...?\n");
+				cin.clear();
+				cin.ignore(123, '\n');
+				cin >> tempDif;
+			}
+
+			validDifficulty = (tempDif == 1 || tempDif == 2 || tempDif == 3);
+		}
+
+		con.clear();
+		bool validName = false;
+		name = "-1";
+		while (!validName)
+		{
+			if (name != "-1")
+			{
+				typeWrite("Now don't give me ya whole name\njust a nickname'll do\n");
+				cin.ignore();
+				cin.clear();
+			}
+			typeWrite("Before you go...what dyou go by?\nJust so I know what to tell passers-by\n");
+			cin >> name;
+
+			validName = name.size() <= 10;
+			getCon().clear();
+		}
+
+		typeWrite("[w] for forward, [s] for back,\n[a] for left and [d] for right\n");
+		typeWrite("Standard stuff but watch out for thoses holes\n[O] they'll swallow you up\n");
+		Sleep(500);
+		getCon().clear();
+		typeWrite("and if one of those zombies [M] dagets a wiff\n-they'll chase you till they get you!\n");
+		Sleep(500);
+		getCon().clear();
+		typeWrite("One last thing remember you can set a trap with [q]\n");
+		Sleep(1000);
+		getCon().clear();
+		typeWrite("It'll make the floor weak [#] all round you \n- perfect for making them fall\n");
+		Sleep(800);
+		getCon().clear();
+		typeWrite("Can't do it too often mind,\nbut remeber the floor's weak behind you\nso they'll fall through that too!");
+		Sleep(500);
+		typeWrite("\nGet enough of them falling through your [#]'s\nand your ambush will be green and ready to go\n");
+		Sleep(500);
+		getCon().clear();
+		setGridSize(tempRow, tempCol);
+		setFromDiffilculty(tempDif);
+		gameSet = true;
+		randomiseBoard();
+
+		getCon().clear();
+		updateInfo();
+	}
+	printBoard();
+	printScoreboard();
 }

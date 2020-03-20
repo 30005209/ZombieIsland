@@ -1,21 +1,7 @@
 HIGHSCORES
-asd: 0
-asd: 0
-asd: 0
-sd: 1
-asd: 1
-asd: 3
-asd: 0
-sad: 7
-asd: 11
-asd: 5
-asd: 2
-asd: 4
-asd: 4
-asd: 5
-asd: 2
-sa: 8
+Jacob: 3
+Monkey: 0
 asd: 6
-asd: 0
-AWD: 4
-df: 20
+Mank: 44
+Jak: 13
+e358m: 1
