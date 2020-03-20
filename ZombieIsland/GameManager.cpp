@@ -1,6 +1,6 @@
 #include "GameManager.h"
 
-typedef vector<Entity>::iterator Position;
+
 
 GameManager::GameManager()
 {
@@ -30,7 +30,7 @@ void GameManager::setEntityNums(int numMon, int numHol, int numCha)
 	this->cha = numCha;
 }
 
-void GameManager::setControlScheme(char newUp, char newDown ,char newLeft, char newRight, char newAmb)
+void GameManager::setControlScheme(char newUp, char newDown, char newLeft, char newRight, char newAmb)
 {
 	this->up = newUp;
 	this->left = newLeft;
@@ -48,7 +48,7 @@ void GameManager::setFromDiffilculty(int diff)
 {
 	this->difficulty = diff;
 	this->difficultyMod = diff * 2;
-	mon = int((getRowNo() * getColNo()) /  (10 - difficultyMod));
+	mon = int((getRowNo() * getColNo()) / (10 - difficultyMod));
 	hol = int((getRowNo() * getColNo()) / (15 - difficultyMod));
 	cha = 1;
 
@@ -110,32 +110,21 @@ int GameManager::getNumCha(void)
 	return this->cha;
 }
 
-
-Entity * GameManager::getEntity(Position givenPos)
-{
-	return givenPos->getSelf();
-}
-
-vector<Entity>* GameManager::getBoard()
-{
-	return &board;
-}
-
 int GameManager::getRemMon(void)
 {
 	int numRemaining = 0;
-	
-	for (Position i = board.begin();
+
+	for (vector<Entity*>::iterator i = board.begin();
 		i != board.end(); i++)
 	{
 		{
-			if (i->getSymbol() == 'M')
+			if ((*i)->getSymbol() == 'M')
 			{
 				numRemaining++;
 			}
 		}
 	}
-	
+
 	return numRemaining;
 }
 
@@ -178,9 +167,9 @@ bool GameManager::playerIsAlive(void)
 {
 	bool playerFound = false;
 
-	for (Position checkPoint = board.begin(); checkPoint != board.end(); checkPoint++)
+	for (vector<Entity*>::iterator i = board.begin(); i != board.end(); i++)
 	{
-		if (checkPoint->getSymbol() == 'C')
+		if ((*i)->getSymbol() == 'C')
 		{
 			playerFound = true;
 		}
@@ -198,22 +187,36 @@ bool GameManager::isPlayerControl(char entry)
 bool GameManager::isGameControl(char key)
 {
 	return false; //(key == getUp() || key == getDown() || key == getLeft() || key == getRight());
-	
+
 }
 
 
 void GameManager::addEntity(char symbol)
-{	
+{
 	static int codeCounter = 1;
-	Entity newEntity(symbol);
-	board.emplace_back(newEntity);   
+	if (symbol == 'M')
+	{
+		board.emplace_back(new Monster());
+	}
+	else if (symbol == 'C')
+	{
+		board.emplace_back(new Character());
+	}
+	else if (symbol == 'O')
+	{
+		board.emplace_back(new Hole());
+	}
+	else
+	{
+		board.emplace_back(new Entity(symbol));
+	}
 }
 
 void GameManager::printBoard(void)
 {
 	con.setCursorPosition({ 0,0 });
-	vector<Entity>::iterator iterBoard = board.begin();
-	
+	vector<Entity*>::iterator iterBoard = board.begin();
+
 	cout << " ";
 
 	for (int i = getColNo(); i > 0; i--)
@@ -221,7 +224,7 @@ void GameManager::printBoard(void)
 		cout << "_";
 	}
 
-	
+
 	cout << "\n|";
 
 	for (int i = 0; iterBoard != board.end(); iterBoard++, i++)
@@ -234,15 +237,15 @@ void GameManager::printBoard(void)
 			}
 
 		}
-		if (iterBoard->getSymbol() == 'M')
+		if ((*iterBoard)->getSymbol() == 'M')
 		{
 			con.setColour(Console::RED);
 		}
-		else if (iterBoard->getSymbol() == 'C')
+		else if ((*iterBoard)->getSymbol() == 'C')
 		{
 			con.setColour(Console::GREEN);
 		}
-		cout << iterBoard->getSymbol();
+		cout << (*iterBoard)->getSymbol();
 
 		con.setColour(Console::WHITE);
 	}
@@ -262,7 +265,7 @@ void GameManager::performPlayerMoves(char move)
 {
 	////Convert the movement char into a direction
 	int direction;
-	
+
 	if (move == getUp())
 	{
 		direction = 0;
@@ -279,16 +282,16 @@ void GameManager::performPlayerMoves(char move)
 	{
 		direction = 3;
 	}
-	else if(move == getAmbush())
+	else if (move == getAmbush())
 	{
-		if (player->getCanAmbush())
+		if ((*player)->getCanAmbush())
 		{
-			(player - 1)->setSym('#');
-			(player + 1)->setSym('#');
-			(player - getColNo())->setSym('#');
-			(player + getColNo())->setSym('#');
-			direction = -1;
-			player->setCanAmbush(false);
+			(*(player - 1))->setSym('#');
+			(*(player + 1))->setSym('#');
+			(*(player - getColNo()))->setSym('#');
+			(*(player + getColNo()))->setSym('#');
+			(direction = -1);
+			(*player)->setCanAmbush(false);
 		}
 		else
 		{
@@ -297,119 +300,116 @@ void GameManager::performPlayerMoves(char move)
 
 	}
 
-	
+
 	//Find player
-	for (Position i = board.begin();
+	for (vector<Entity*>::iterator i = board.begin();
 		i != board.end(); i++)
 	{
-		if (i->getSymbol() == 'C')
+		if ((*i)->getSymbol() == 'C')
 		{
 			//Perform move in the given direction
-			if (!i->getHasChanged())
+			if (!(*i)->getHasChanged())
 			{
-				moveEntity(i->getSelf(), direction);
-				i->setChanged(true);
+				moveEntity(i, direction);
+				(*i)->setChanged(true);
 			}
 		}
 	}
-	
+
 }
 
 void GameManager::performMonsterMoves(void)
 {
 	//Find Monster
-	for (vector<Entity>::iterator i = board.begin();
+	for (vector<Entity*>::iterator i = board.begin();
 		i != board.end(); i++)
 	{
-		if (i->getSymbol() == 'M')
+		if ((*i)->getSymbol() == 'M')
 		{
 			//Perform move in a direction chosen by the entity
-			if (!i->getHasChanged())
+			if (!(*i)->getHasChanged())
 			{
-				decideEnemyMovement(i->getSelf());
-				moveEntity(i->getSelf());
-				i->setChanged(true);
+				decideEnemyMovement((*i)->getSelf());
+				moveEntity(i);
+				(*i)->setChanged(true);
 
 			}
 		}
 	}
-   
+
 }
 
 
-void GameManager::moveEntity(Entity* theEntity, int direction)
+void GameManager::moveEntity(vector<Entity*>::iterator theEntity, int direction)
 {
-	Entity * encountered = theEntity;
+	if (direction != -1)
+	{
+		Entity * encountered = (*theEntity);
 
 
-	//If no value has been given decide based on the desires of the entity
-	if (direction == 999)
-	{
-		direction = theEntity->getPredomDesire();
+		//If no value has been given decide based on the desires of the entity
+		if (direction == 999)
+		{
+			direction = (*theEntity)->getPredomDesire();
+		}
+
+		//If the direction would cause the entity to go off the edge the opposite direction is chosen
+		if (isOnColEdgeT((*theEntity)) && direction == 0)
+		{
+			direction = 2;
+		}
+		else if (isOnColEdgeB((*theEntity)) && direction == 2)
+		{
+			direction = 0;
+		}
+
+		if (isOnRowEdgeL((*theEntity)) && direction == 3)
+		{
+			direction = 1;
+		}
+		else if (isOnRowEdgeR((*theEntity)) && direction == 1)
+		{
+			direction = 3;
+		}
+
+		//Decide what it is encountering
+		switch (direction)
+		{
+			//Move Up
+		case 0:
+			//Set position to the position it is at - the total number of columns 
+			encountered = (*(theEntity - this->getColNo()));
+			break;
+
+			//Move Right
+		case 1:
+			//Set position to the position it is at + the total number of columns
+			encountered = (*(theEntity + 1));
+			break;
+
+			//Move Down
+		case 2:
+			//Set the position to the position before (-1)
+			encountered = (*(theEntity + this->getColNo()));
+			break;
+
+			//Move Left
+		case 3:
+			//Set the potiion to the postion after (+1)
+			encountered = (*(theEntity - 1));
+			break;
+		}
+
+
+		encounter((*theEntity), encountered);
 	}
 
-	//If the direction would cause the entity to go off the edge the opposite direction is chosen
-	if (isOnColEdgeT(theEntity) && direction == 0)
-	{
-		direction = 2;
-	}
-	else if (isOnColEdgeB(theEntity) && direction == 2)
-	{
-		direction = 0;
-	}
-
-	if (isOnRowEdgeL(theEntity) && direction == 3)
-	{
-		direction = 1;
-	}
-	else if (isOnRowEdgeR(theEntity) && direction == 1)
-	{
-		direction = 3;
-	}
-	
-	//Decide what it is encountering
-	switch (direction)
-	{
-	//Move Up
-	case 0:
-		//Set position to the position it is at - the total number of columns 
-		encountered = (theEntity - this->getColNo());
-		break;
-
-	//Move Right
-	case 1:
-		//Set position to the position it is at + the total number of columns
-		encountered = (theEntity + 1);
-		break;
-
-	//Move Down
-	case 2:
-		//Set the position to the position before (-1)
-		encountered = (theEntity + this->getColNo());
-		break;
-
-	//Move Left
-	case 3:
-		//Set the potiion to the postion after (+1)
-		encountered = (theEntity - 1);
-		break;
-	}
-	
-	//If the player has ambushed no encounter will take place so do nothing
-	if (direction == -1)
-	{
-
-	}
-	else
-	{
-		theEntity->encounter(encountered);
-	}
 }
 
 bool GameManager::isOnRowEdgeR(Entity * looking)
 {
 	//return if the Entity is on the Left Edge
-	return (getCol(looking) == getColNo()-1);
+	return (getCol(looking) == getColNo() - 1);
 }
 
 bool GameManager::isOnRowEdgeL(Entity * looking)
@@ -435,10 +435,10 @@ int GameManager::getPos(Entity * looking)
 	int x = 0;
 
 	//Loop through the entity to find where it is in the board
-	for (vector<Entity>::iterator pos = board.begin();
+	for (vector<Entity*>::iterator pos = board.begin();
 		pos != board.end();	pos++)
 	{
-		if (looking == pos->getSelf())
+		if (looking == (*pos)->getSelf())
 		{
 			return x;
 		}
@@ -481,20 +481,20 @@ void GameManager::decideEnemyMovement(Entity *current)
 {
 	//+ve is left, -ve is right
 	//+ve is up, -ve is down
-	current->setDesires(getCol(current) - getCol(player->getSelf()),
-						getRow(current) - getRow(player->getSelf()));		
+	current->setDesires(getCol(current) - getCol((*player)->getSelf()),
+		getRow(current) - getRow((*player)->getSelf()));
 }
 
 void GameManager::enableMovement(void)
 {
-	for (Position i = board.begin();
+	for (vector<Entity*>::iterator i = board.begin();
 		i != board.end(); i++)
 	{
-		if (i->getSymbol() == '#')
+		if ((*i)->getSymbol() == '#')
 		{
-			i->setSym(' ');
+			(*i)->setSym(' ');
 		}
-		i->setChanged(false);
+		(*i)->setChanged(false);
 	}
 }
 
@@ -502,14 +502,14 @@ void GameManager::printScoreboard(void)
 {
 	cout << "\n";
 
-	for (int i = getColNo()+2; i > 0; i--)
+	for (int i = getColNo() + 2; i > 0; i--)
 	{
 		cout << "=";
 	}
 
 	cout << "\n|Mons:  " << getRemMon();
 
-	for (int i = getColNo() - con.getCursorPosition().X +1;
+	for (int i = getColNo() - con.getCursorPosition().X + 1;
 		i > 0; i--)
 	{
 		cout << " ";
@@ -533,7 +533,7 @@ void GameManager::printScoreboard(void)
 
 	cout << "|\n|";
 
-	if (player->getCanAmbush())
+	if ((*player)->getCanAmbush())
 	{
 		con.setColour(con.GREEN);
 	}
@@ -552,7 +552,7 @@ void GameManager::printScoreboard(void)
 	con.setColour(con.WHITE);
 
 	cout << "|\n";
-	for (int i = getColNo()+2; i > 0; i--)
+	for (int i = getColNo() + 2; i > 0; i--)
 	{
 		cout << "=";
 	}
@@ -567,7 +567,7 @@ void GameManager::playTurn(void)
 
 	//Get key
 	char key = _getch();
-	
+
 	//Enable movement for everyone
 	enableMovement();
 
@@ -579,7 +579,7 @@ void GameManager::playTurn(void)
 	//else if its a player control
 	else if (isPlayerControl(key))
 	{
-		performPlayerMoves(key);		
+		performPlayerMoves(key);
 		performMonsterMoves();
 		change = true;
 		key = ' ';
@@ -611,14 +611,14 @@ void GameManager::addMonster(void)
 {
 	bool found = false;
 	//Find the first empty slot and change to a monster
-	for (Position i = board.begin(); i != board.end();
+	for (vector<Entity*>::iterator i = board.begin(); i != board.end();
 		i++)
 	{
 		if (!found)
 		{
-			if (i->getSymbol() == ' ')
+			if ((*i)->getSymbol() == ' ')
 			{
-				i->setSym('M');
+				(*i)->setSym('M');
 				found = true;
 			}
 		}
@@ -637,22 +637,132 @@ void GameManager::increaseDif(void)
 void GameManager::updateInfo(void)
 {
 	//Update positions of the player
-	for (Position checkPoint = board.begin(); checkPoint != board.end(); checkPoint++)
+	for (vector<Entity*>::iterator i = board.begin(); i != board.end(); i++)
 	{
-		if (checkPoint->getSymbol() == 'C')
+		if ((*i)->getSymbol() == 'C')
 		{
-			player = checkPoint;
+			player = i;
 		}
 
-		if (checkPoint->getSymbol() == '0')
+		if ((*i)->getSymbol() == '0')
 		{
 			score++;
-			checkPoint->setSym(' ');
+			(*i)->setSym(' ');
 			if (!(score % 5))
 			{
-				player->setCanAmbush(true);
+				(*player)->setCanAmbush(true);
 			}
 		}
+	}
+
+}
+
+void GameManager::encounter(Entity * theEntity, Entity * encountered)
+{
+	char theEnt = theEntity->getSymbol();
+	char enc = encountered->getSymbol();
+	enum { swap, die, kill, fall, dieWP };
+
+
+	int result = theEntity->encounter(encountered);
+	switch (result)
+	{
+	case swap:
+		swapEnts(theEntity, encountered);
+		break;
+
+	case die:
+		theEntity->setSym('X');
+		break;
+
+	case kill:
+		encountered->setSym('X');
+		break;
+
+	case fall:
+		theEntity->setSym(' ');
+		break;
+
+	case dieWP:
+		score++;
+		theEntity->setSym('0');
+		break;
+	}
+
+	theEntity->setChanged(true);
+	encountered->setChanged(true);
+
+}
+
+void GameManager::swapEnts(Entity *source, Entity *other)
+{
+	//If this is a monster...
+	if (source->getSymbol() == 'M')
+	{
+		//Decide behaviour based on what its encountering
+		switch (other->getSymbol())
+		{
+			//If its a blank space swap them
+		case ' ':
+			std::swap(*source, *other);
+			source->setChanged(true);
+			other->setChanged(true);
+			break;
+
+			//If its a hole kill self
+		case 'O':
+			source->setSym(' ');
+			source->setChanged(true);
+			break;
+
+			//If its a monster do nothing (can be seen as swapping or bouncing off)
+		case 'M':
+			break;
+
+			//If its the player kill the player
+		case 'C':
+			other->setSym('X');
+			other->setChanged(true);
+			break;
+
+		case '#':
+			source->setSym(' ');
+			other->setSym('0');
+			source->setChanged(true);
+		}
+	}
+
+	//If this is the player...
+	else if (source->getSymbol() == 'C')
+	{
+
+		//Decide behaviour based on what its encountering
+		switch (other->getSymbol())
+		{
+			//If its a blank space swap them
+		case ' ':
+			std::swap(*source, *other);
+			source->setSym('#');
+			source->setChanged(true);
+			other->setChanged(true);
+			break;
+
+			//If its a hole kill self
+		case 'O':
+			source->setSym(' ');
+			source->setChanged(true);
+			break;
+
+			//If its a monster kill self
+		case 'M':
+			source->setSym('X');
+			source->setChanged(true);
+			break;
+		}
+	}
+	else
+	{
+
 	}
 
 }
