@@ -133,6 +133,9 @@
     <ClInclude Include="Hole.h" />
     <ClInclude Include="Monster.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="Pseudo.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

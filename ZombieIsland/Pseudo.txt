@@ -1,0 +1,57 @@
+Entity class
+	symbol					//displaying what it is
+	encounter(Entity *)		//gives result on what happens when it encounters another entity
+	
+
+Hole child class of Entity
+	symbol = 'O'
+
+Monster child class of Entity
+	symbol = 'M'
+	overridden encounter(Entity*)	//To handle encounters in own way
+
+Character child class of Entity
+	symbol = 'C'
+	overriden encounter(Entity*)	//To handle encounters in own way
+	bool to denote whether can ambush	//Advanced version which creates weak spots around character
+
+
+
+GameManager
+	vector<Entity*> board					//board to be a vector of the parent type pointer to allow for children to be held in container
+	INPUT gridsize							//to get the size of the board at runtime (as to be decided by the player)
+	INPUT entityCombination(int,int,int)	//for monsters holes and character
+	Console con								//to allow for console class functionality
+	bool playerAlive						//To check if the player is alive and on the board
+	bool monstersLeft						//To check to see if there are any monsters left
+	print board								//function to print the board iterating throught the vector of entity*
+	print scoreboard						//function to print other game info below the board
+	moveEntity(vector<Entity*>::iterator,
+	int)									//Move a given entity in a direction (a default one if not decided beforehand)
+	decideEnemyMovement(Entity*)			//To be used to feed into the move entity function to lets enemies decide where to go
+	addEntity(Entity*)						//Add a given thing to the board (may be broken into addMonster, addCharacter)
+	updateInfo(void)						//Function to make sure the board is represented visually and behind the scence coherently
+	setUp(void)								//Function to allow the main game loop to not dominate the source file
+	playTurn(void)							//Main game loop function to handle game logic etc
+
+
+Die class to be used from previous coursework
+
+Typewriter functions to be added to GameManager (also used in previous coursework)
+
+
+//Source file
+
+ifstream
+ofstream
+
+GameManager::setUp
+
+while(monstersLeft && playerAlive)
+	UpdateInfo
+	PlayTurn
+
+if(monstersLeft)
+	add points to score and write to text file with no bonus
+else
+	add points to score and write to text file with bonus (*2 or *3)

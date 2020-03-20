@@ -1,4 +1,6 @@
-#pragma once
+#ifndef _Monster
+#define _Monster
+
 #include "Entity.h"
 class Monster :
 	virtual public Entity
@@ -9,15 +11,17 @@ private:
 public:
 	Monster();
 	~Monster();
-	
+
 	//Setters
-	void setDesires(int, int);				//Sets where monsters would like to move
+	void setDesires(int, int);						//Sets where monsters would like to move
 
 	//Getters
 	int getXDesire(void);							//Get where the monster would like to move x
 	int getYDesire(void);							//Get where the monster would like to move y
-	int getPredomDesire(void)override;
+	int getPredomDesire(void)override;				//Overriden Predmominant movement desires from the entity class
 
 	//Other Functions
-	int encounter(Entity* );					//Handles encounters with another entity
+	int encounter(Entity*);						//Handles encounters with another entity
 };
+
+#endif

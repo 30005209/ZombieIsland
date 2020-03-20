@@ -1,7 +1,5 @@
 #include "GameManager.h"
 
-
-
 GameManager::GameManager()
 {
 	setGridSize();
@@ -896,7 +894,7 @@ void GameManager::setUp(void)
 				
 				cin >> tempRow;
 
-				while (!cin >> tempRow || tempRow > 20| tempRow < 10)
+				while (!cin >> tempRow || tempRow > 20 || tempRow < 10)
 				{
 						typeWrite("What was that?\n");
 						cin.clear();

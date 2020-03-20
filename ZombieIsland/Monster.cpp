@@ -1,7 +1,5 @@
 #include "Monster.h"
 
-
-
 Monster::Monster()
 {
 	setSym('M');
@@ -25,75 +23,80 @@ int Monster::getYDesire(void)
 
 int Monster::getPredomDesire(void)
 {
-		//if within 2 tiles
+	//if within 2 tiles
 	if (abs(getXDesire()) <= 2)
 	{
 		if (abs(getYDesire()) <= 2)
+		{
+
 			{
-
+				//If its further away in X than Y
+				if (abs(getXDesire()) > abs(getYDesire()))
 				{
-					//If its further away in X than Y
-					if (abs(getXDesire()) > abs(getYDesire()))
+					//If its further to the right than the goal
+					if (getXDesire() < 0)
 					{
-						//If its further to the right than the goal
-						if (getXDesire() < 0)
-						{
-							//return left
-							return 1;
-						}
-						else
-						{
-							//return right
-							return 3;
-
-						}
+						//return left
+						return 1;
 					}
-					//If its further away in Y than X
 					else
 					{
-						//If its further up than the goal
-						if (getYDesire() < 0)
-						{
-							//Return down
-							return 2;
-						}
-						else
-						{
-							//Return up
-							return 0;
-						}
+						//return right
+						return 3;
+
 					}
-				}}
+				}
+				//If its further away in Y than X
+				else
+				{
+					//If its further up than the goal
+					if (getYDesire() < 0)
+					{
+						//Return down
+						return 2;
+					}
+					else
+					{
+						//Return up
+						return 0;
+					}
+				}
+			}
+		}
 	}
-		//Return a random value if check fails
-		return Die::roll(4) - 1;
+	//Return a random value if check fails
+	return Die::roll(4) - 1;
 }
 
 int Monster::encounter(Entity * other)
 {
-	//0 == swap
-	//1 == die
-	//2 == kill
-	//3 == fall
-	//4 == die (with points)
 
+	//Enum for legibility
 	enum { swap = 0, die = 1, kill = 2, fall = 3, dieWP = 4 };
 
 	int result = 0;
 
+
+	//If encountering a blank space swap places
 	if (other->getSymbol() == ' ')
 	{
 		result = swap;
 
 	}
+
+	//If encountering the player - kill them
 	else if (other->getSymbol() == 'C')
 	{
 		result = kill;
 	}
+
+	//If encounering a hole - fall
 	else if (other->getSymbol() == 'O')
 	{
 		result = fall;
 	}
+
+	//If encountering a weak floor die and score points for the player
 	else if (other->getSymbol() == '#')
 	{
 		result = dieWP;

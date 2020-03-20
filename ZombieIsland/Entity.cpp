@@ -73,43 +73,41 @@ int Entity::getYDesire(void)
 
 int Entity::getPredomDesire(void)
 {
-	//if within 2 tiles
+	//if within 2 tiles X direction
 	if (abs(getXDesire()) <= 2)
 	{
+		//and within 2 tiles in Y direction
 		if (abs(getYDesire()) <= 2)
 		{
-
+			//If its further away in X than Y
+			if (abs(getXDesire()) > abs(getYDesire()))
 			{
-				//If its further away in X than Y
-				if (abs(getXDesire()) > abs(getYDesire()))
+				//If its further to the right than the goal
+				if (getXDesire() < 0)
 				{
-					//If its further to the right than the goal
-					if (getXDesire() < 0)
-					{
-						//return left
-						return 1;
-					}
-					else
-					{
-						//return right
-						return 3;
-
-					}
+					//return left
+					return 1;
 				}
-				//If its further away in Y than X
 				else
 				{
-					//If its further up than the goal
-					if (getYDesire() < 0)
-					{
-						//Return down
-						return 2;
-					}
-					else
-					{
-						//Return up
-						return 0;
-					}
+					//return right
+					return 3;
+
+				}
+			}
+			//If its further away in Y than X
+			else
+			{
+				//If its further up than the goal
+				if (getYDesire() < 0)
+				{
+					//Return down
+					return 2;
+				}
+				else
+				{
+					//Return up
+					return 0;
 				}
 			}
 		}
@@ -123,40 +121,11 @@ int Entity::getPredomDesire(void)
 bool Entity::getCanAmbush(void)
 {
 	return this->canAmbush;
-;
 }
 
 int Entity::encounter(Entity * other)
 {
-	//0 == swap
-	//1 == die
-	//2 == kill
-	//3 == fall
-	//4 == die (with points)
-
-	enum { swap = 0, die = 1, kill = 2, fall = 3, dieWP = 4 };
-
-	int result = 0;
-	
-	if (this->getSymbol() == 'O')
-	{
-		if (this->getSymbol() == ' ')
-		{
-			result = swap;
-		}
-		else if (this->getSymbol() == 'M')
-		{
-			result = swap;
-		}
-		else if (this->getSymbol() == 'C')
-		{
-			result = swap;
-		}
-		else if (this->getSymbol() == '#')
-		{
-			result = swap;
-		}
-	}
-	return result;
+	//just for use as a virtual function
+	return 0;
 }
 

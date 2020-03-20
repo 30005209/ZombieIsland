@@ -1,4 +1,6 @@
-#pragma once
+#ifndef _Character
+#define _Character
+
 #include "Entity.h"
 class Character :
 	virtual public Entity
@@ -13,3 +15,4 @@ public:
 	void setCanAmbush(bool);
 
 };
+#endif
