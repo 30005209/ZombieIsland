@@ -286,10 +286,23 @@ void GameManager::performPlayerMoves(char move)
 	{
 		if ((*player)->getCanAmbush())
 		{
-			(*(player - 1))->setSym('#');
-			(*(player + 1))->setSym('#');
-			(*(player - getColNo()))->setSym('#');
-			(*(player + getColNo()))->setSym('#');
+			if (!(isOnRowEdgeL(*player)))
+			{
+				(*(player - 1))->setSym('#');
+			}
+
+			if (!(isOnRowEdgeR(*player)))
+			{
+				(*(player + 1))->setSym('#');
+			}
+			if (!(isOnColEdgeT(*player)))
+			{
+				(*(player - getColNo()))->setSym('#');
+			}
+			if (!(isOnColEdgeB(*player)))
+			{
+				(*(player + getColNo()))->setSym('#');
+			}
 			(direction = -1);
 			(*player)->setCanAmbush(false);
 		}

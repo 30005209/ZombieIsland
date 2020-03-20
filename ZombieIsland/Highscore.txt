@@ -16,3 +16,6 @@ asd: 5
 asd: 2
 sa: 8
 asd: 6
+asd: 0
+AWD: 4
+df: 20
