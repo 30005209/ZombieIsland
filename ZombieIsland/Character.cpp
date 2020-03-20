@@ -41,3 +41,13 @@ int Character::encounter(Entity * other)
 
 	return result;
 }
+
+bool Character::getCanAmbush(void)
+{
+	return canAmbush;
+}
+
+void Character::setCanAmbush(bool newVal)
+{
+	this->canAmbush = newVal;
+}

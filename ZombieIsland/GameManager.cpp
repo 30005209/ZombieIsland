@@ -206,7 +206,7 @@ void GameManager::addEntity(char symbol)
 	{
 		board.emplace_back(new Hole());
 	}
-	else
+	else 
 	{
 		board.emplace_back(new Entity(symbol));
 	}
@@ -329,6 +329,7 @@ void GameManager::performMonsterMoves(void)
 			//Perform move in a direction chosen by the entity
 			if (!(*i)->getHasChanged())
 			{
+
 				decideEnemyMovement((*i)->getSelf());
 				moveEntity(i);
 				(*i)->setChanged(true);
@@ -344,14 +345,14 @@ void GameManager::moveEntity(vector<Entity*>::iterator theEntity, int direction)
 {
 	if (direction != -1)
 	{
-		Entity * encountered = (*theEntity);
-
-
 		//If no value has been given decide based on the desires of the entity
 		if (direction == 999)
 		{
 			direction = (*theEntity)->getPredomDesire();
 		}
+
+		Entity * encountered = (*theEntity);
+
 
 		//If the direction would cause the entity to go off the edge the opposite direction is chosen
 		if (isOnColEdgeT((*theEntity)) && direction == 0)
@@ -415,7 +416,7 @@ bool GameManager::isOnRowEdgeR(Entity * looking)
 bool GameManager::isOnRowEdgeL(Entity * looking)
 {
 	//return if the Entity is on the Right Edge
-	return (getCol(looking) == getColNo());
+	return (getCol(looking) == 0);
 }
 
 bool GameManager::isOnColEdgeB(Entity * looking)
@@ -455,7 +456,7 @@ int GameManager::getRow(Entity *looking)
 	int row = 0;
 
 	//while x > the size of a row remove a row and increment the count
-	while ((x - getRowNo()) > 0)
+	while ((x - getRowNo()) >= 0)
 	{
 		x -= getRowNo();
 		row++;
@@ -469,7 +470,7 @@ int GameManager::getCol(Entity *looking)
 	int x = getPos(looking);
 
 	//- the amount of the row until doing so would make the amound -ve
-	while ((x - getRowNo()) > 0)
+	while ((x - getRowNo()) >= 0)
 	{
 		x -= getRowNo();
 	}
@@ -481,7 +482,7 @@ void GameManager::decideEnemyMovement(Entity *current)
 {
 	//+ve is left, -ve is right
 	//+ve is up, -ve is down
-	current->setDesires(getCol(current) - getCol((*player)->getSelf()),
+	(current)->setDesires(getCol(current) - getCol((*player)->getSelf()),
 		getRow(current) - getRow((*player)->getSelf()));
 }
 
@@ -500,6 +501,7 @@ void GameManager::enableMovement(void)
 
 void GameManager::printScoreboard(void)
 {
+	updateInfo();
 	cout << "\n";
 
 	for (int i = getColNo() + 2; i > 0; i--)
@@ -541,7 +543,7 @@ void GameManager::printScoreboard(void)
 	{
 		con.setColour(con.RED);
 	}
-	cout << "Amush " << getScore();
+	cout << "Ambush " << getScore();
 
 	for (int i = getColNo() - con.getCursorPosition().X + 1;
 		i > 0; i--)

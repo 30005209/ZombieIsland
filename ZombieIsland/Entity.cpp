@@ -29,9 +29,10 @@ void Entity::setChanged(bool newBool)
 	this->hasChanged = newBool;
 }
 
-void Entity::setDesires(int, int)
+void Entity::setDesires(int x, int y)
 {
-	//virtual
+	this->moveDesires[0] = x;
+	this->moveDesires[1] = y;
 }
 
 
@@ -60,9 +61,61 @@ Entity * Entity::getSelf(void)
 	return this;
 }
 
+int Entity::getXDesire(void)
+{
+	return moveDesires[0];
+}
+
+int Entity::getYDesire(void)
+{
+	return moveDesires[1];
+}
+
 int Entity::getPredomDesire(void)
 {
-	return 0;
+	//if within 2 tiles
+	if (abs(getXDesire()) <= 2)
+	{
+		if (abs(getYDesire()) <= 2)
+		{
+
+			{
+				//If its further away in X than Y
+				if (abs(getXDesire()) > abs(getYDesire()))
+				{
+					//If its further to the right than the goal
+					if (getXDesire() < 0)
+					{
+						//return left
+						return 1;
+					}
+					else
+					{
+						//return right
+						return 3;
+
+					}
+				}
+				//If its further away in Y than X
+				else
+				{
+					//If its further up than the goal
+					if (getYDesire() < 0)
+					{
+						//Return down
+						return 2;
+					}
+					else
+					{
+						//Return up
+						return 0;
+					}
+				}
+			}
+		}
+	}
+	//Return a random value if check fails
+	return Die::roll(4) - 1;
 }
 
 
