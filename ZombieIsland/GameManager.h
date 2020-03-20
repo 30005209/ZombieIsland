@@ -41,10 +41,18 @@ private:
 	char right;				//Keybind for right
 	char ambush;			//Keybind for ambush
 
+	//Base typing speed
+	int gameSpeedBase = 90;
+
+	//How much the typing speed can vary by
+	int gameSpeedVar = 30;
+
+
 	int turn;
 	int score;
 	int difficulty;
 	int difficultyMod;
+	string name;
 
 public:
 	GameManager();
@@ -61,13 +69,21 @@ public:
 	void setFromDiffilculty(int);
 
 
+	//Randomly slow down text
+	void randomSlow(void);
+
+	//Write a given string in the "typwriter" fashion
+	void typeWrite(string);
+
 	//Getters
 
 	int getRowNo(void);										//Get the row size
 	int getColNo(void);										//Get the column size
 	int getTurn(void);										//Gets the number of turns
 	int getScore(void);										//Gets the score
-
+	int getSpeedVar(void);
+	int getSpeedBase(void);
+	string getName(void);
 
 	int getNumMon(void);									//Get the number of monsters
 	int getNumHol(void);									//Get the number of Holes
@@ -89,9 +105,8 @@ public:
 	//Other functions
 
 	bool monstersRemain(void);								//Is the game over
-	bool playerIsAlive(void);
+	bool playerIsAlive(void);								//Checks if a player is on the board
 	bool isPlayerControl(char);								//Check if its a control for the player
-	bool isGameControl(char);								//Check if its a game control
 
 
 	void addEntity(char symbol = ' ');						//Adds a new entity with the given symbol - default of " " for space
@@ -132,6 +147,8 @@ public:
 	void encounter(Entity*, Entity*);
 
 	void swapEnts(Entity*, Entity*);
+	
+	void setUp(void);
 };
 
 #endif

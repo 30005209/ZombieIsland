@@ -29,7 +29,7 @@ int Die::roll(int number)
 {
 	static std::random_device rd;
 	static std::mt19937 mersenne(rd());
-	static std::uniform_int_distribution<int> dist(1, number);
+	std::uniform_int_distribution<int> dist(1, number);
 	dist(mersenne);
 
 	return dist(mersenne);
