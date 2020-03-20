@@ -5,6 +5,9 @@
 #include <iostream>
 #include "console.h"
 #include "Entity.h"
+#include "Monster.h"
+#include "Character.h"
+#include "Hole.h"
 #include "Die.h"
 #include <vector>
 #include <string>
@@ -18,15 +21,12 @@ using std::endl;
 class GameManager
 {
 private:
-	
-	//To help legibility Position will be used when refering to the board
-	typedef vector<Entity>::iterator Position;
 
 	Console con;			//The Console class
 
-	vector<Entity> board;	//The Board being played on
+	vector<Entity*> board;	//The Board being played on
 
-	Position player;
+	vector<Entity*>::iterator player;
 
 	int rows;				//No. rows on the board at game start
 	int cols;				//No. columns on the board at game start
@@ -73,9 +73,6 @@ public:
 	int getNumHol(void);									//Get the number of Holes
 	int getNumCha(void);									//Get the number of Player characters
 
-	Entity* getEntity(Position);							//Returns a pointer to an entity at a given postion
-
-	vector<Entity> * getBoard();
 
 	int getRemMon(void);									//Gets how many remaining monsters there are
 
@@ -106,7 +103,7 @@ public:
 	void performPlayerMoves(char);							//Performs all the moves for Players
 	void performMonsterMoves(void);							//Performs all the moves for Monsters
 
-	void moveEntity(Entity*,int = 999);						//Performs a movement action for the given entity in the given direction
+	void moveEntity(vector<Entity*>::iterator,int = 999);	//Performs a movement action for the given entity in the given direction
 
 	bool isOnRowEdgeL(Entity*);								//Returns whether the entity is on the left edge  
 	bool isOnRowEdgeR(Entity*);								//Returns whether the entity is on the right edge  
@@ -132,6 +129,9 @@ public:
 
 	void updateInfo(void);										//Updates the info held by Game Manager
 
+	void encounter(Entity*, Entity*);
+
+	void swapEnts(Entity*, Entity*);
 };
 
 #endif

@@ -12,12 +12,10 @@ class Entity
 {
 private:
 	
-	typedef vector<Entity>::iterator Position;
 
 	char symbol;									//The symbol being displayed
 	bool hasChanged;								//Notes whether the Entity has changed since it was last printed
 	int baseMove;									//Denotes the standard number of turns	
-	int moveDesires[2];								//Denotes where the monsters would like to move
 	bool canAmbush;
 
 public:
@@ -29,7 +27,7 @@ public:
 	void setSym(char);								//Set symbol to a given one
 	void setBaseMove(int);							//Sets the baseMove to a given one
 	void setChanged(bool);							//States that the Entity has taken its turn/changed
-	void setDesires(int, int);						//Sets where monsters would like to move
+	virtual void setDesires(int, int);						//Sets where monsters would like to move
 	void setCanAmbush(bool);
 		
 
@@ -38,13 +36,11 @@ public:
 	int getBaseMove(void);							//Gets the base movement value
 	bool getHasChanged(void);						//Get haschanged
 	Entity* getSelf(void);							//Gets a pointer to self
-	int getXDesire(void);							//Get where the monster would like to move x
-	int getYDesire(void);							//Get where the monster would like to move y
-	int getPredomDesire(void);
+	virtual int getPredomDesire(void);
 	bool getCanAmbush(void);
 
 	//Other Functions
-	void encounter(Entity* other);					//Handles encounters with another entity
+	virtual int encounter(Entity* other);					//Handles encounters with another entity
 };
 
 
