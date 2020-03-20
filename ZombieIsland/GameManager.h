@@ -22,9 +22,11 @@ private:
 	//To help legibility Position will be used when refering to the board
 	typedef vector<Entity>::iterator Position;
 
-	Console con;	//The Console class
+	Console con;			//The Console class
 
 	vector<Entity> board;	//The Board being played on
+
+	Position player;
 
 	int rows;				//No. rows on the board at game start
 	int cols;				//No. columns on the board at game start
@@ -37,8 +39,10 @@ private:
 	char down;				//Keybind for down
 	char left;				//Keybind for left
 	char right;				//Keybind for right
+	char ambush;			//Keybind for ambush
 
 	int turn;
+	int score;
 	int difficulty;
 	int difficultyMod;
 
@@ -50,24 +54,24 @@ public:
 	void setGridSize(int numRow = 20, int numCol = 40);										//Set the size of the rows and columns on the board
 	void setEntityNums(int numMon = 50, int numHole = 30, int numCha = 1);					//Set the number of monster, holes and characters
 	void setControlScheme(char newUp = 'w', char newDown = 's',								//Set the control scheme for the player
-						char newLeft = 'a', char newRight = 'd');
+						char newLeft = 'a', char newRight = 'd',
+						char newAmb = 'q');
 
 	void setTurn(int);
 	void setFromDiffilculty(int);
 
 
-	//Geetters
+	//Getters
 
-	int getRow(void);										//Get the row size
-	int getCol(void);										//Get the column size
-	int getTurn(void);
+	int getRowNo(void);										//Get the row size
+	int getColNo(void);										//Get the column size
+	int getTurn(void);										//Gets the number of turns
+	int getScore(void);										//Gets the score
 
 
 	int getNumMon(void);									//Get the number of monsters
 	int getNumHol(void);									//Get the number of Holes
 	int getNumCha(void);									//Get the number of Player characters
-
-
 
 	Entity* getEntity(Position);							//Returns a pointer to an entity at a given postion
 
@@ -79,7 +83,7 @@ public:
 	char getDown(void);										//Get the currently mapped control for down
 	char getLeft(void);										//Get the currently mapped control for left
 	char getRight(void);									//Get the currently mapped control for right
-
+	char getAmbush(void);									//Get the currently mapped control for ambush
 
 
 	Console & getCon(void);									//Gets the console
@@ -87,7 +91,7 @@ public:
 
 	//Other functions
 
-	bool monstersRemain(void);									//Is the game over
+	bool monstersRemain(void);								//Is the game over
 	bool playerIsAlive(void);
 	bool isPlayerControl(char);								//Check if its a control for the player
 	bool isGameControl(char);								//Check if its a game control
@@ -102,7 +106,19 @@ public:
 	void performPlayerMoves(char);							//Performs all the moves for Players
 	void performMonsterMoves(void);							//Performs all the moves for Monsters
 
-	void moveEntity(Entity*,int);								//Performs a movement action for the given entity
+	void moveEntity(Entity*,int = 999);						//Performs a movement action for the given entity in the given direction
+
+	bool isOnRowEdgeL(Entity*);								//Returns whether the entity is on the left edge  
+	bool isOnRowEdgeR(Entity*);								//Returns whether the entity is on the right edge  
+	bool isOnColEdgeT(Entity*);								//Returns whether the entity is on the left edge
+	bool isOnColEdgeB(Entity*);								//Returns whether the entity is on the right edge
+
+
+	int getPos(Entity*);									//Finds the current position of the given entity
+	int getRow(Entity*);									//Finds the current row of the given entity
+	int getCol(Entity*);									//Finds the current col of the given entity
+
+	void decideEnemyMovement(Entity*);						//If within 
 
 	void enableMovement(void);
 
@@ -113,6 +129,8 @@ public:
 	void addMonster(void);
 
 	void increaseDif(void);
+
+	void updateInfo(void);										//Updates the info held by Game Manager
 
 };
 
